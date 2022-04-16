@@ -107,7 +107,7 @@ public class Model extends Observable {
      *    and the trailing tile does not.
      * */
     public boolean tilt(Side side) {
-        boolean changed;
+       boolean changed;
         changed = false;
         board.setViewingPerspective(side);
         //Traverse every tile (except the row (size-1) ) on the board
