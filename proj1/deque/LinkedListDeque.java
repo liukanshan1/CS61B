@@ -1,5 +1,7 @@
-/** Linked list based deque.
- *  @author CuiYuxin
+/**
+ * Linked list based deque.
+ *
+ * @author CuiYuxin
  */
 package deque;
 
@@ -9,11 +11,14 @@ public class LinkedListDeque<Item> {
         Node<Item> next;
         Node<Item> prev;
     }
+
     private int size;
     private Node<Item> sentinel;
 
-    /** Creates an empty deque.
-     *  @author CuiYuxin
+    /**
+     * Creates an empty deque.
+     *
+     * @author CuiYuxin
      */
     public LinkedListDeque() {
         size = 0;
@@ -22,7 +27,9 @@ public class LinkedListDeque<Item> {
         sentinel.prev = sentinel;
     }
 
-    /** Inserts an item at the front.*
+    /**
+     * Inserts an item at the front.*
+     *
      * @author CuiYuxin
      */
     public void addFirst(Item item) {
@@ -35,7 +42,9 @@ public class LinkedListDeque<Item> {
         size++;
     }
 
-    /** Inserts item into the back of the deque.
+    /**
+     * Inserts item into the back of the deque.
+     *
      * @author CuiYuxin
      */
     public void addLast(Item item) {
@@ -48,22 +57,28 @@ public class LinkedListDeque<Item> {
         size++;
     }
 
-    /** Returns if the deque is empty.
-     *  @author CuiYuxin
+    /**
+     * Returns if the deque is empty.
+     *
+     * @author CuiYuxin
      */
     public boolean isEmpty() {
         return size == 0;
     }
 
-    /** Returns the number of items in the deque.
-     *  @author CuiYuxin
+    /**
+     * Returns the number of items in the deque.
+     *
+     * @author CuiYuxin
      */
     public int size() {
         return size;
     }
 
-    /** Prints the items in the deque from first to last, separated by a space.
-     *  @author CuiYuxin
+    /**
+     * Prints the items in the deque from first to last, separated by a space.
+     *
+     * @author CuiYuxin
      */
     public void printDeque() {
         //string s;
@@ -75,8 +90,10 @@ public class LinkedListDeque<Item> {
         System.out.println();
     }
 
-    /** Removes and returns the item at the front of the deque.
-     *  @author CuiYuxin
+    /**
+     * Removes and returns the item at the front of the deque.
+     *
+     * @author CuiYuxin
      */
     public Item removeFirst() {
         if (isEmpty()) {
@@ -89,8 +106,10 @@ public class LinkedListDeque<Item> {
         return node.data;
     }
 
-    /** Deletes item from back of the deque and returns deleted item.
-     *  @author CuiYuxin
+    /**
+     * Deletes item from back of the deque and returns deleted item.
+     *
+     * @author CuiYuxin
      */
     public Item removeLast() {
         if (isEmpty()) {
@@ -103,8 +122,10 @@ public class LinkedListDeque<Item> {
         return node.data;
     }
 
-    /** Gets the ith item in the deque, using iterate.
-     *  @author CuiYuxin
+    /**
+     * Gets the ith item in the deque, using iterate.
+     *
+     * @author CuiYuxin
      */
     public Item get(int index) {
         if (index < 0 || index >= size) {
@@ -117,8 +138,10 @@ public class LinkedListDeque<Item> {
         return node.data;
     }
 
-    /** Gets the ith item in the deque, using recurse.
-     *  @author CuiYuxin
+    /**
+     * Gets the ith item in the deque, using recurse.
+     *
+     * @author CuiYuxin
      */
     public Item getRecursive(int index) {
         if (index < 0 || index >= size) {
@@ -127,8 +150,10 @@ public class LinkedListDeque<Item> {
         return getRecursive(index, sentinel.next);
     }
 
-    /** Gets the ith item in the deque, using recurse(a helping method).
-     *  @author CuiYuxin
+    /**
+     * Gets the ith item in the deque, using recurse(a helping method).
+     *
+     * @author CuiYuxin
      */
     private Item getRecursive(int index, Node<Item> node) {
         if (index == 0) {

@@ -1,10 +1,13 @@
 package deque;
 
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 
-/** Performs some basic linked list tests. */
+/**
+ * Performs some basic linked list tests.
+ */
 public class LinkedListDequeTest {
 
     @Test
@@ -14,20 +17,20 @@ public class LinkedListDequeTest {
     public void addIsEmptySizeTest() {
         LinkedListDeque<String> lld1 = new LinkedListDeque<String>();
 
-		assertTrue("A newly initialized LLDeque should be empty", lld1.isEmpty());
-		lld1.addFirst("front");
+        assertTrue("A newly initialized LLDeque should be empty", lld1.isEmpty());
+        lld1.addFirst("front");
 
         assertEquals(1, lld1.size());
         assertFalse("lld1 should now contain 1 item", lld1.isEmpty());
 
-		lld1.addLast("middle");
-		assertEquals(2, lld1.size());
+        lld1.addLast("middle");
+        assertEquals(2, lld1.size());
 
-		lld1.addLast("back");
-		assertEquals(3, lld1.size());
+        lld1.addLast("back");
+        assertEquals(3, lld1.size());
 
-		System.out.println("Printing out deque: ");
-		lld1.printDeque();
+        System.out.println("Printing out deque: ");
+        lld1.printDeque();
     }
 
     @Test
@@ -35,21 +38,21 @@ public class LinkedListDequeTest {
      *  @author CuiYuxin */
     public void addRemoveTest() {
         LinkedListDeque<Integer> lld1 = new LinkedListDeque<Integer>();
-		// should be empty
-		assertTrue("lld1 should be empty upon initialization", lld1.isEmpty());
-
-		lld1.addFirst(10);
-		// should not be empty
-		assertFalse("lld1 should contain 1 item", lld1.isEmpty());
+        // should be empty
+        assertTrue("lld1 should be empty upon initialization", lld1.isEmpty());
 
         lld1.addFirst(10);
         // should not be empty
         assertFalse("lld1 should contain 1 item", lld1.isEmpty());
 
-		lld1.removeFirst();
+        lld1.addFirst(10);
+        // should not be empty
+        assertFalse("lld1 should contain 1 item", lld1.isEmpty());
+
         lld1.removeFirst();
-		// should be empty
-		assertTrue("lld1 should be empty after removal", lld1.isEmpty());
+        lld1.removeFirst();
+        // should be empty
+        assertTrue("lld1 should be empty after removal", lld1.isEmpty());
 
         lld1.addLast(10);
         // should not be empty
@@ -91,8 +94,8 @@ public class LinkedListDequeTest {
      *  get(index) and getRecursive(index) works well.
      *  @author CuiYuxin */
     public void multipleParamTest() {
-        LinkedListDeque<String>  lld1 = new LinkedListDeque<String>();
-        LinkedListDeque<Double>  lld2 = new LinkedListDeque<Double>();
+        LinkedListDeque<String> lld1 = new LinkedListDeque<String>();
+        LinkedListDeque<Double> lld2 = new LinkedListDeque<Double>();
         LinkedListDeque<Boolean> lld3 = new LinkedListDeque<Boolean>();
 
         lld1.addFirst("string");
@@ -157,7 +160,7 @@ public class LinkedListDequeTest {
         lld1.addLast(3);
         lld1.addLast(4);
         //lld1.printDeque();
-        assertEquals("Should return the correct value", 1, lld1.get(1) ,0.0);
+        assertEquals("Should return the correct value", 1, lld1.get(1), 0.0);
         assertEquals("Should return the correct value", 4, lld1.get(3), 0.0);
         assertEquals("Should return the correct value", 1, lld1.getRecursive(1), 0.0);
         assertEquals("Should return the correct value", 4, lld1.getRecursive(3), 0.0);

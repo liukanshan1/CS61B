@@ -1,5 +1,7 @@
-/** Array based deque.
- *  @author CuiYuxin
+/**
+ * Array based deque.
+ *
+ * @author CuiYuxin
  */
 package deque;
 
@@ -28,7 +30,7 @@ public class ArrayDeque<Item> {
         }
         arr[nextFirst] = item;
         size++;
-        nextFirst= toPrev(nextFirst);
+        nextFirst = toPrev(nextFirst);
     }
 
     /** Inserts item into the back of the deque.
@@ -40,7 +42,7 @@ public class ArrayDeque<Item> {
         }
         arr[nextLast] = item;
         size++;
-        nextLast= toNext(nextLast);
+        nextLast = toNext(nextLast);
     }
 
     /** Returns if the deque is empty.
@@ -61,10 +63,10 @@ public class ArrayDeque<Item> {
      *  @author CuiYuxin
      */
     public void printDeque() {
-        int i = nextFirst+1;
-        while(i != nextLast) {
+        int i = nextFirst + 1;
+        while (i != nextLast) {
             System.out.print(arr[i] + " ");
-            i= toNext(i);
+            i = toNext(i);
         }
         System.out.println();
     }
@@ -80,7 +82,7 @@ public class ArrayDeque<Item> {
         Item item = arr[nextFirst];
         arr[nextFirst] = null;
         size--;
-        if (arr.length >= 16  && size <= arr.length / 4) {
+        if (arr.length >= 16 && size <= arr.length / 4) {
             resize(arr.length / 2);
         }
         return item;
@@ -97,7 +99,7 @@ public class ArrayDeque<Item> {
         Item item = arr[nextLast];
         arr[nextLast] = null;
         size--;
-        if (arr.length >= 16  && size <= arr.length / 4) {
+        if (arr.length >= 16 && size <= arr.length / 4) {
             resize(arr.length / 2);
         }
         return item;
@@ -110,7 +112,7 @@ public class ArrayDeque<Item> {
         if (index < 0 || index >= size) {
             return null;
         }
-        int i = nextFirst+1;
+        int i = nextFirst + 1;
         for (int j = 0; j < index; j++) {
             i = toNext(i);
         }
@@ -124,10 +126,10 @@ public class ArrayDeque<Item> {
         Item[] temp = (Item[]) new Object[capacity];
         int i = nextFirst + 1;
         int j = 1;
-        while(i != nextLast) {
+        while (i != nextLast) {
             temp[j] = arr[i];
             j++;
-            i= toNext(i);
+            i = toNext(i);
         }
         nextFirst = 0;
         nextLast = j;
