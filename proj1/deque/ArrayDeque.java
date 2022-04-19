@@ -1,3 +1,6 @@
+/** Array based deque.
+ *  @author CuiYuxin
+ */
 package deque;
 
 public class ArrayDeque<Item> {
@@ -6,6 +9,9 @@ public class ArrayDeque<Item> {
     private int nextFirst;
     private int nextLast;
 
+    /** Creates an empty deque.
+     *  @author CuiYuxin
+     */
     public ArrayDeque() {
         size = 0;
         arr = (Item[]) new Object[8];
@@ -13,6 +19,9 @@ public class ArrayDeque<Item> {
         nextLast = 5;
     }
 
+    /** Inserts an item at the front.*
+     * @author CuiYuxin
+     */
     public void addFirst(Item item) {
         if (size == arr.length) {
             resize(size * 2);
@@ -22,6 +31,9 @@ public class ArrayDeque<Item> {
         nextFirst= toPrev(nextFirst);
     }
 
+    /** Inserts item into the back of the deque.
+     * @author CuiYuxin
+     */
     public void addLast(Item item) {
         if (size == arr.length) {
             resize(size * 2);
@@ -31,14 +43,23 @@ public class ArrayDeque<Item> {
         nextLast= toNext(nextLast);
     }
 
+    /** Returns if the deque is empty.
+     *  @author CuiYuxin
+     */
     public boolean isEmpty() {
         return size == 0;
     }
 
+    /** Returns the number of items in the deque.
+     *  @author CuiYuxin
+     */
     public int size() {
         return size;
     }
 
+    /** Prints the items in the deque from first to last, separated by a space.
+     *  @author CuiYuxin
+     */
     public void printDeque() {
         int i = nextFirst+1;
         while(i != nextLast) {
@@ -48,6 +69,9 @@ public class ArrayDeque<Item> {
         System.out.println();
     }
 
+    /** Removes and returns the item at the front of the deque.
+     *  @author CuiYuxin
+     */
     public Item removeFirst() {
         if (isEmpty()) {
             return null;
@@ -62,6 +86,9 @@ public class ArrayDeque<Item> {
         return item;
     }
 
+    /** Deletes item from back of the deque and returns deleted item.
+     *  @author CuiYuxin
+     */
     public Item removeLast() {
         if (isEmpty()) {
             return null;
@@ -76,7 +103,9 @@ public class ArrayDeque<Item> {
         return item;
     }
 
-
+    /** Gets the ith item in the deque.
+     *  @author CuiYuxin
+     */
     public Item get(int index) {
         if (index < 0 || index >= size) {
             return null;
@@ -88,6 +117,9 @@ public class ArrayDeque<Item> {
         return arr[i];
     }
 
+    /** Resizes the underlying array to the target capacity.
+     *  @author CuiYuxin
+     */
     private void resize(int capacity) {
         Item[] temp = (Item[]) new Object[capacity];
         int i = nextFirst + 1;
@@ -102,6 +134,9 @@ public class ArrayDeque<Item> {
         arr = temp;
     }
 
+    /** Returns the next index of the array.
+     *  @author CuiYuxin
+     */
     private int toNext(int index) {
         if (index == arr.length - 1) {
             index = 0;
@@ -111,6 +146,9 @@ public class ArrayDeque<Item> {
         return index;
     }
 
+    /** Returns the previous index of the array.
+     *  @author CuiYuxin
+     */
     private int toPrev(int index) {
         if (index == 0) {
             index = arr.length - 1;
@@ -119,5 +157,4 @@ public class ArrayDeque<Item> {
         }
         return index;
     }
-
 }
