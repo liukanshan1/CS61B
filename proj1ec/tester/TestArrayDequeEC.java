@@ -84,7 +84,7 @@ public class TestArrayDequeEC {
             message += info.get(i) + "\n";
         }
         assertEquals(message, sol.size(), stu.size());
-        while (sol.size() > 0) {
+        while (!stu.isEmpty()) {
             String temp = "";
             int rand = StdRandom.uniform(20);
             Integer actual, expected;
