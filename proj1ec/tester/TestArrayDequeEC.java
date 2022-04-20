@@ -61,7 +61,8 @@ public class TestArrayDequeEC {
         ArrayDequeSolution<Integer> sol = new ArrayDequeSolution<Integer>();
         ArrayDequeSolution<String> info = new ArrayDequeSolution<String>();
         for (int i = 0; i < 500; i++) {
-            Integer actual = 1, expected = 1;
+            Integer actual = 1;
+            Integer expected = 1;
             String temp = "";
             int rand = StdRandom.uniform(400);
             if (rand < 100) {
