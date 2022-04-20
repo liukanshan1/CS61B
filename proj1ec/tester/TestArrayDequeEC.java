@@ -14,7 +14,6 @@ import edu.princeton.cs.introcs.StdRandom;
 public class TestArrayDequeEC {
     /**
      * Testing for adding items.
-     *
      * @author CuiYuxin
      */
     @Test
@@ -54,7 +53,6 @@ public class TestArrayDequeEC {
 
     /**
      * Testing for removing items.
-     *
      * @author CuiYuxin
      */
     @Test
@@ -112,6 +110,4 @@ public class TestArrayDequeEC {
             assertEquals(message2, expected, actual);
         }
     }
-
-
 }
