@@ -60,17 +60,34 @@ public class TestArrayDequeEC {
         StudentArrayDeque<Integer> stu = new StudentArrayDeque<Integer>();
         ArrayDequeSolution<Integer> sol = new ArrayDequeSolution<Integer>();
         ArrayDequeSolution<String> info = new ArrayDequeSolution<String>();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 500; i++) {
+            Integer actual = 1, expected = 1;
             String temp = "";
-            int rand = StdRandom.uniform(300);
-            if (rand < 150) {
+            int rand = StdRandom.uniform(400);
+            if (rand < 100) {
                 stu.addLast(rand);
                 sol.addLast(rand);
                 temp += "addLast(" + rand + ")";
-            } else {
+            } else if (rand < 200) {
                 stu.addFirst(rand);
                 sol.addFirst(rand);
                 temp += "addFirst(" + rand + ")";
+            } else if (rand < 300) {
+                if (!stu.isEmpty() && !sol.isEmpty()) {
+                    actual = stu.removeLast();
+                    expected = sol.removeLast();
+                    temp += "removeLast()";
+                } else {
+                    continue;
+                }
+            } else {
+                if (!stu.isEmpty() && !sol.isEmpty()) {
+                    actual = stu.removeFirst();
+                    expected = sol.removeFirst();
+                    temp += "removeFirst()";
+                } else {
+                    continue;
+                }
             }
             if (info.size() < 3) {
                 info.addLast(temp);
@@ -78,36 +95,12 @@ public class TestArrayDequeEC {
                 info.removeFirst();
                 info.addLast(temp);
             }
-        }
-        String message = "";
-        for (int i = 0; i < info.size(); i++) {
-            message += info.get(i) + "\n";
-        }
-        assertEquals(message, sol.size(), stu.size());
-        while (!stu.isEmpty()) {
-            String temp = "";
-            int rand = StdRandom.uniform(20);
-            Integer actual, expected;
-            if (rand % 2 == 0) {
-                actual = stu.removeLast();
-                expected = sol.removeLast();
-                temp += "removeLast()";
-            } else {
-                actual = stu.removeFirst();
-                expected = sol.removeFirst();
-                temp += "removeFirst()";
+            String message = "";
+            for (int j = 0; j < info.size(); j++) {
+                message += info.get(j) + "\n";
             }
-            if (info.size() < 3) {
-                info.addLast(temp);
-            } else {
-                info.removeFirst();
-                info.addLast(temp);
-            }
-            String message2 = "";
-            for (int i = 0; i < info.size(); i++) {
-                message2 += info.get(i) + "\n";
-            }
-            assertEquals(message2, expected, actual);
+            assertEquals(message, expected, actual);
         }
+
     }
 }
