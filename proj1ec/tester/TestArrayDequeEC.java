@@ -69,10 +69,12 @@ public class TestArrayDequeEC {
                 stu.addLast(rand);
                 sol.addLast(rand);
                 temp += "addLast(" + rand + ")";
+                continue;
             } else if (rand < 200) {
                 stu.addFirst(rand);
                 sol.addFirst(rand);
                 temp += "addFirst(" + rand + ")";
+                continue;
             } else if (rand < 300) {
                 if (!stu.isEmpty() && !sol.isEmpty()) {
                     actual = stu.removeLast();
@@ -104,4 +106,7 @@ public class TestArrayDequeEC {
         }
 
     }
+
+
+
 }
