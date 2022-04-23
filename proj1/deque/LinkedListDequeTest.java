@@ -90,8 +90,8 @@ public class LinkedListDequeTest {
     }
 
     @Test
-    /** Check if you can create LinkedListDeques with different parameterized types and Check if the function
-     *  get(index) and getRecursive(index) works well.
+    /** Check if you can create LinkedListDeques with different parameterized types
+     *  and Check if the function get(index) and getRecursive(index) works well.
      *  @author CuiYuxin */
     public void multipleParamTest() {
         LinkedListDeque<String> lld1 = new LinkedListDeque<String>();
@@ -127,8 +127,10 @@ public class LinkedListDequeTest {
 
         //boolean passed1 = false;
         //boolean passed2 = false;
-        assertEquals("Should return null when removeFirst is called on an empty Deque,", null, lld1.removeFirst());
-        assertEquals("Should return null when removeLast is called on an empty Deque,", null, lld1.removeLast());
+        assertEquals("Should return null when removeFirst is called on an empty Deque,",
+                null, lld1.removeFirst());
+        assertEquals("Should return null when removeLast is called on an empty Deque,",
+                null, lld1.removeLast());
 
     }
 

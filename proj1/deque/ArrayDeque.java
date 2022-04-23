@@ -14,8 +14,10 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
     private int nextFirst;
     private int nextLast;
 
-    /** Creates an empty deque.
-     *  @author CuiYuxin
+    /**
+     * Creates an empty deque.
+     *
+     * @author CuiYuxin
      */
     public ArrayDeque() {
         size = 0;
@@ -24,7 +26,9 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
         nextLast = 5;
     }
 
-    /** Inserts an item at the front.*
+    /**
+     * Inserts an item at the front.*
+     *
      * @author CuiYuxin
      */
     @Override
@@ -37,7 +41,9 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
         nextFirst = toPrev(nextFirst);
     }
 
-    /** Inserts item into the back of the deque.
+    /**
+     * Inserts item into the back of the deque.
+     *
      * @author CuiYuxin
      */
     @Override
@@ -50,16 +56,20 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
         nextLast = toNext(nextLast);
     }
 
-    /** Returns the number of items in the deque.
-     *  @author CuiYuxin
+    /**
+     * Returns the number of items in the deque.
+     *
+     * @author CuiYuxin
      */
     @Override
     public int size() {
         return size;
     }
 
-    /** Prints the items in the deque from first to last, separated by a space.
-     *  @author CuiYuxin
+    /**
+     * Prints the items in the deque from first to last, separated by a space.
+     *
+     * @author CuiYuxin
      */
     @Override
     public void printDeque() {
@@ -71,8 +81,10 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
         System.out.println();
     }
 
-    /** Removes and returns the item at the front of the deque.
-     *  @author CuiYuxin
+    /**
+     * Removes and returns the item at the front of the deque.
+     *
+     * @author CuiYuxin
      */
     @Override
     public T removeFirst() {
@@ -89,8 +101,10 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
         return t;
     }
 
-    /** Deletes item from back of the deque and returns deleted item.
-     *  @author CuiYuxin
+    /**
+     * Deletes item from back of the deque and returns deleted item.
+     *
+     * @author CuiYuxin
      */
     @Override
     public T removeLast() {
@@ -107,8 +121,10 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
         return t;
     }
 
-    /** Gets the ith item in the deque.
-     *  @author CuiYuxin
+    /**
+     * Gets the ith item in the deque.
+     *
+     * @author CuiYuxin
      */
     @Override
     public T get(int index) {
@@ -122,25 +138,29 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
         return arr[i];
     }
 
-    /** Resizes the underlying array to the target capacity.
-     *  @author CuiYuxin
+    /**
+     * Resizes the underlying array to the target capacity.
+     *
+     * @author CuiYuxin
      */
     private void resize(int capacity) {
         T[] temp = (T[]) new Object[capacity];
-        int i = nextFirst + 1;
+        int i = toNext(nextFirst);
         int j = 1;
-        while (i != nextLast) {
+        do {
             temp[j] = arr[i];
             j++;
             i = toNext(i);
-        }
+        } while (i != nextLast);
         nextFirst = 0;
         nextLast = j;
         arr = temp;
     }
 
-    /** Returns the next index of the array.
-     *  @author CuiYuxin
+    /**
+     * Returns the next index of the array.
+     *
+     * @author CuiYuxin
      */
     private int toNext(int index) {
         if (index == arr.length - 1) {
@@ -151,8 +171,10 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
         return index;
     }
 
-    /** Returns the previous index of the array.
-     *  @author CuiYuxin
+    /**
+     * Returns the previous index of the array.
+     *
+     * @author CuiYuxin
      */
     private int toPrev(int index) {
         if (index == 0) {
@@ -163,9 +185,10 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
         return index;
     }
 
-
-    /** Judege if two deques are equal.
-     *  @author CuiYuxin
+    /**
+     * Judege if two deques are equal.
+     *
+     * @author CuiYuxin
      */
     public boolean equals(Object o) {
         if (o == this) {
@@ -186,33 +209,40 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
         return true;
     }
 
-    /** Returns the iterator.
-     *  @author CuiYuxin
+    /**
+     * Returns the iterator.
+     *
+     * @author CuiYuxin
      */
     public Iterator<T> iterator() {
         return new DequeIterator();
     }
 
-    /** The iterator.
-     *  @author CuiYuxin
+    /**
+     * The iterator.
+     *
+     * @author CuiYuxin
      */
     private class DequeIterator implements Iterator<T> {
         private int index;
 
-
-        public DequeIterator() {
+        DequeIterator() {
             index = nextFirst + 1;
         }
 
-        /** Returns if there is a next item.
-         *  @author CuiYuxin
+        /**
+         * Returns if there is a next item.
+         *
+         * @author CuiYuxin
          */
         public boolean hasNext() {
             return index != nextLast;
         }
 
-        /** Returns the next item.
-         *  @author CuiYuxin
+        /**
+         * Returns the next item.
+         *
+         * @author CuiYuxin
          */
         public T next() {
             if (!hasNext()) {

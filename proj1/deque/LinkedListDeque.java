@@ -189,7 +189,7 @@ public class LinkedListDeque<T> implements Iterable<T>, Deque<T> {
     private class DequeIterator implements Iterator<T> {
         private Node<T> node;
 
-        public DequeIterator() {
+        DequeIterator() {
             node = sentinel.next;
         }
 
