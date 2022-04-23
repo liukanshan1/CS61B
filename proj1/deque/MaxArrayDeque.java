@@ -1,17 +1,23 @@
 package deque;
+
 import java.util.Comparator;
+
 public class MaxArrayDeque<Item> extends ArrayDeque<Item> {
     private Comparator<Item> maxComparator;
 
-    /** Constructor.
-     *  @author CuiYuxin
+    /**
+     * Constructor.
+     *
+     * @author CuiYuxin
      */
     public MaxArrayDeque(Comparator<Item> c) {
         maxComparator = c;
     }
 
-    /** Return the max item in the deque, using Comparator given by constructor.
-     *  @author CuiYuxin
+    /**
+     * Return the max item in the deque, using Comparator given by constructor.
+     *
+     * @author CuiYuxin
      */
     public Item max() {
         if (size() == 0) {
@@ -26,8 +32,10 @@ public class MaxArrayDeque<Item> extends ArrayDeque<Item> {
         return maxItem;
     }
 
-    /** Return the max item in the deque, using Comparator given by parameter.
-     *  @author CuiYuxin
+    /**
+     * Return the max item in the deque, using Comparator given by parameter.
+     *
+     * @author CuiYuxin
      */
     public Item max(Comparator<Item> c) {
         if (size() == 0) {

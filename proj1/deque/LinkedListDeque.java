@@ -1,18 +1,21 @@
 /**
  * Linked list based deque.
+ *
  * @author CuiYuxin
  */
 package deque;
+
 import java.util.Iterator;
 
-public class LinkedListDeque<Item> implements Iterable<Item>, Deque<Item> {
+public class LinkedListDeque<T> implements Iterable<T>, Deque<T> {
     private static class Node<Item> {
         Item data;
         Node<Item> next;
         Node<Item> prev;
     }
+
     private int size;
-    private Node<Item> sentinel;
+    private Node<T> sentinel;
 
     /**
      * Creates an empty deque.
@@ -20,7 +23,7 @@ public class LinkedListDeque<Item> implements Iterable<Item>, Deque<Item> {
      */
     public LinkedListDeque() {
         size = 0;
-        sentinel = new Node<Item>();
+        sentinel = new Node<T>();
         sentinel.next = sentinel;
         sentinel.prev = sentinel;
     }
@@ -30,9 +33,9 @@ public class LinkedListDeque<Item> implements Iterable<Item>, Deque<Item> {
      * @author CuiYuxin
      */
     @Override
-    public void addFirst(Item item) {
-        Node<Item> node = new Node<Item>();
-        node.data = item;
+    public void addFirst(T t) {
+        Node<T> node = new Node<T>();
+        node.data = t;
         node.next = sentinel.next;
         node.prev = sentinel;
         sentinel.next = node;
@@ -45,9 +48,9 @@ public class LinkedListDeque<Item> implements Iterable<Item>, Deque<Item> {
      * @author CuiYuxin
      */
     @Override
-    public void addLast(Item item) {
-        Node<Item> node = new Node<Item>();
-        node.data = item;
+    public void addLast(T t) {
+        Node<T> node = new Node<T>();
+        node.data = t;
         node.next = sentinel;
         node.prev = sentinel.prev;
         node.prev.next = node;
@@ -71,7 +74,7 @@ public class LinkedListDeque<Item> implements Iterable<Item>, Deque<Item> {
     @Override
     public void printDeque() {
         //string s;
-        Node<Item> node = sentinel.next;
+        Node<T> node = sentinel.next;
         while (node != sentinel) {
             System.out.print(node.data + " ");
             node = node.next;
@@ -84,11 +87,11 @@ public class LinkedListDeque<Item> implements Iterable<Item>, Deque<Item> {
      * @author CuiYuxin
      */
     @Override
-    public Item removeFirst() {
+    public T removeFirst() {
         if (isEmpty()) {
             return null;
         }
-        Node<Item> node = sentinel.next;
+        Node<T> node = sentinel.next;
         sentinel.next.next.prev = sentinel;
         sentinel.next = sentinel.next.next;
         size--;
@@ -100,11 +103,11 @@ public class LinkedListDeque<Item> implements Iterable<Item>, Deque<Item> {
      * @author CuiYuxin
      */
     @Override
-    public Item removeLast() {
+    public T removeLast() {
         if (isEmpty()) {
             return null;
         }
-        Node<Item> node = sentinel.prev;
+        Node<T> node = sentinel.prev;
         sentinel.prev.prev.next = sentinel;
         sentinel.prev = sentinel.prev.prev;
         size--;
@@ -116,11 +119,11 @@ public class LinkedListDeque<Item> implements Iterable<Item>, Deque<Item> {
      * @author CuiYuxin
      */
     @Override
-    public Item get(int index) {
+    public T get(int index) {
         if (index < 0 || index >= size) {
             return null;
         }
-        Node<Item> node = sentinel.next;
+        Node<T> node = sentinel.next;
         for (int i = 0; i < index; i++) {
             node = node.next;
         }
@@ -131,7 +134,7 @@ public class LinkedListDeque<Item> implements Iterable<Item>, Deque<Item> {
      * Gets the ith item in the deque, using recurse.
      * @author CuiYuxin
      */
-    public Item getRecursive(int index) {
+    public T getRecursive(int index) {
         if (index < 0 || index >= size) {
             return null;
         }
@@ -142,7 +145,7 @@ public class LinkedListDeque<Item> implements Iterable<Item>, Deque<Item> {
      * Gets the ith item in the deque, using recurse(a helping method).
      * @author CuiYuxin
      */
-    private Item getRecursive(int index, Node<Item> node) {
+    private T getRecursive(int index, Node<T> node) {
         if (index == 0) {
             return node.data;
         }
@@ -175,7 +178,7 @@ public class LinkedListDeque<Item> implements Iterable<Item>, Deque<Item> {
      * Returns the iterator.
      * @author CuiYuxin
      */
-    public Iterator<Item> iterator() {
+    public Iterator<T> iterator() {
         return new DequeIterator();
     }
 
@@ -183,8 +186,8 @@ public class LinkedListDeque<Item> implements Iterable<Item>, Deque<Item> {
      * The iterator.
      * @author CuiYuxin
      */
-    private class DequeIterator implements Iterator<Item> {
-        private Node<Item> node;
+    private class DequeIterator implements Iterator<T> {
+        private Node<T> node;
 
         public DequeIterator() {
             node = sentinel.next;
@@ -194,14 +197,14 @@ public class LinkedListDeque<Item> implements Iterable<Item>, Deque<Item> {
             return node != sentinel;
         }
 
-        public Item next() {
+        public T next() {
             if (!hasNext()) {
                 //throw new NoSuchElementException();
                 return null;
             }
-            Item item = node.data;
+            T t = node.data;
             node = node.next;
-            return item;
+            return t;
         }
     }
 }

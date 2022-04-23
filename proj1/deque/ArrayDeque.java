@@ -1,14 +1,16 @@
 /**
  * Array based deque.
+ *
  * @author CuiYuxin
  */
 package deque;
+
 import java.util.Iterator;
 
 
-public class ArrayDeque<Item> implements Iterable<Item>, Deque<Item> {
+public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
     private int size;
-    private Item[] arr;
+    private T[] arr;
     private int nextFirst;
     private int nextLast;
 
@@ -17,7 +19,7 @@ public class ArrayDeque<Item> implements Iterable<Item>, Deque<Item> {
      */
     public ArrayDeque() {
         size = 0;
-        arr = (Item[]) new Object[8];
+        arr = (T[]) new Object[8];
         nextFirst = 4;
         nextLast = 5;
     }
@@ -26,11 +28,11 @@ public class ArrayDeque<Item> implements Iterable<Item>, Deque<Item> {
      * @author CuiYuxin
      */
     @Override
-    public void addFirst(Item item) {
+    public void addFirst(T t) {
         if (size == arr.length) {
             resize(size * 2);
         }
-        arr[nextFirst] = item;
+        arr[nextFirst] = t;
         size++;
         nextFirst = toPrev(nextFirst);
     }
@@ -39,11 +41,11 @@ public class ArrayDeque<Item> implements Iterable<Item>, Deque<Item> {
      * @author CuiYuxin
      */
     @Override
-    public void addLast(Item item) {
+    public void addLast(T t) {
         if (size == arr.length) {
             resize(size * 2);
         }
-        arr[nextLast] = item;
+        arr[nextLast] = t;
         size++;
         nextLast = toNext(nextLast);
     }
@@ -73,43 +75,43 @@ public class ArrayDeque<Item> implements Iterable<Item>, Deque<Item> {
      *  @author CuiYuxin
      */
     @Override
-    public Item removeFirst() {
+    public T removeFirst() {
         if (isEmpty()) {
             return null;
         }
         nextFirst = toNext(nextFirst);
-        Item item = arr[nextFirst];
+        T t = arr[nextFirst];
         arr[nextFirst] = null;
         size--;
         if (arr.length >= 16 && size <= arr.length / 4) {
             resize(arr.length / 2);
         }
-        return item;
+        return t;
     }
 
     /** Deletes item from back of the deque and returns deleted item.
      *  @author CuiYuxin
      */
     @Override
-    public Item removeLast() {
+    public T removeLast() {
         if (isEmpty()) {
             return null;
         }
         nextLast = toPrev(nextLast);
-        Item item = arr[nextLast];
+        T t = arr[nextLast];
         arr[nextLast] = null;
         size--;
         if (arr.length >= 16 && size <= arr.length / 4) {
             resize(arr.length / 2);
         }
-        return item;
+        return t;
     }
 
     /** Gets the ith item in the deque.
      *  @author CuiYuxin
      */
     @Override
-    public Item get(int index) {
+    public T get(int index) {
         if (index < 0 || index >= size) {
             return null;
         }
@@ -124,7 +126,7 @@ public class ArrayDeque<Item> implements Iterable<Item>, Deque<Item> {
      *  @author CuiYuxin
      */
     private void resize(int capacity) {
-        Item[] temp = (Item[]) new Object[capacity];
+        T[] temp = (T[]) new Object[capacity];
         int i = nextFirst + 1;
         int j = 1;
         while (i != nextLast) {
@@ -187,19 +189,17 @@ public class ArrayDeque<Item> implements Iterable<Item>, Deque<Item> {
     /** Returns the iterator.
      *  @author CuiYuxin
      */
-    public Iterator<Item> iterator() {
+    public Iterator<T> iterator() {
         return new DequeIterator();
     }
 
     /** The iterator.
      *  @author CuiYuxin
      */
-    private class DequeIterator implements Iterator<Item> {
+    private class DequeIterator implements Iterator<T> {
         private int index;
 
-        /** Constructor.
-         *  @author CuiYuxin
-         */
+
         public DequeIterator() {
             index = nextFirst + 1;
         }
@@ -214,14 +214,14 @@ public class ArrayDeque<Item> implements Iterable<Item>, Deque<Item> {
         /** Returns the next item.
          *  @author CuiYuxin
          */
-        public Item next() {
+        public T next() {
             if (!hasNext()) {
                 //throw new NoSuchElementException();
                 return null;
             }
-            Item item = arr[index];
+            T t = arr[index];
             index = toNext(index);
-            return item;
+            return t;
         }
     }
 }

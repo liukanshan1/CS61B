@@ -92,7 +92,7 @@ public class GuitarPlayer {
                     int tempo = (data[0] & 0xff) << 16 | (data[1] & 0xff) << 8 | (data[2] & 0xff);
                     bpm = 60000000.0 / tempo;
                     samplesPerTick = StdAudio.SAMPLE_RATE
-                        * (60.0 / (sequence.getResolution() * bpm));
+                            * (60.0 / (sequence.getResolution() * bpm));
                 } else if (mm.getType() == 0x05) {
                     // lyrics
                     data = mm.getData();
