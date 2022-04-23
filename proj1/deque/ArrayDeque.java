@@ -1,11 +1,12 @@
 /**
  * Array based deque.
- *
  * @author CuiYuxin
  */
 package deque;
+import java.util.Iterator;
 
-public class ArrayDeque<Item> {
+
+public class ArrayDeque<Item> implements Iterable<Item>, Deque<Item> {
     private int size;
     private Item[] arr;
     private int nextFirst;
@@ -24,6 +25,7 @@ public class ArrayDeque<Item> {
     /** Inserts an item at the front.*
      * @author CuiYuxin
      */
+    @Override
     public void addFirst(Item item) {
         if (size == arr.length) {
             resize(size * 2);
@@ -36,6 +38,7 @@ public class ArrayDeque<Item> {
     /** Inserts item into the back of the deque.
      * @author CuiYuxin
      */
+    @Override
     public void addLast(Item item) {
         if (size == arr.length) {
             resize(size * 2);
@@ -45,16 +48,10 @@ public class ArrayDeque<Item> {
         nextLast = toNext(nextLast);
     }
 
-    /** Returns if the deque is empty.
-     *  @author CuiYuxin
-     */
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
     /** Returns the number of items in the deque.
      *  @author CuiYuxin
      */
+    @Override
     public int size() {
         return size;
     }
@@ -62,6 +59,7 @@ public class ArrayDeque<Item> {
     /** Prints the items in the deque from first to last, separated by a space.
      *  @author CuiYuxin
      */
+    @Override
     public void printDeque() {
         int i = nextFirst + 1;
         while (i != nextLast) {
@@ -74,6 +72,7 @@ public class ArrayDeque<Item> {
     /** Removes and returns the item at the front of the deque.
      *  @author CuiYuxin
      */
+    @Override
     public Item removeFirst() {
         if (isEmpty()) {
             return null;
@@ -91,6 +90,7 @@ public class ArrayDeque<Item> {
     /** Deletes item from back of the deque and returns deleted item.
      *  @author CuiYuxin
      */
+    @Override
     public Item removeLast() {
         if (isEmpty()) {
             return null;
@@ -108,11 +108,12 @@ public class ArrayDeque<Item> {
     /** Gets the ith item in the deque.
      *  @author CuiYuxin
      */
+    @Override
     public Item get(int index) {
         if (index < 0 || index >= size) {
             return null;
         }
-        int i = nextFirst + 1;
+        int i = toNext(nextFirst);
         for (int j = 0; j < index; j++) {
             i = toNext(i);
         }
@@ -158,5 +159,69 @@ public class ArrayDeque<Item> {
             index--;
         }
         return index;
+    }
+
+
+    /** Judege if two deques are equal.
+     *  @author CuiYuxin
+     */
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Deque)) {
+            return false;
+        }
+        Deque other = (Deque) o;
+        if (other.size() != size()) {
+            return false;
+        }
+        for (int j = 0; j < size(); j++) {
+            if (!this.get(j).equals(other.get(j))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /** Returns the iterator.
+     *  @author CuiYuxin
+     */
+    public Iterator<Item> iterator() {
+        return new DequeIterator();
+    }
+
+    /** The iterator.
+     *  @author CuiYuxin
+     */
+    private class DequeIterator implements Iterator<Item> {
+        private int index;
+
+        /** Constructor.
+         *  @author CuiYuxin
+         */
+        public DequeIterator() {
+            index = nextFirst + 1;
+        }
+
+        /** Returns if there is a next item.
+         *  @author CuiYuxin
+         */
+        public boolean hasNext() {
+            return index != nextLast;
+        }
+
+        /** Returns the next item.
+         *  @author CuiYuxin
+         */
+        public Item next() {
+            if (!hasNext()) {
+                //throw new NoSuchElementException();
+                return null;
+            }
+            Item item = arr[index];
+            index = toNext(index);
+            return item;
+        }
     }
 }
