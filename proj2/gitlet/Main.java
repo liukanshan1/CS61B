@@ -9,22 +9,26 @@ public class Main {
      *  <COMMAND> <OPERAND1> <OPERAND2> ... 
      */
     public static void main(String[] args) {
-        if (args.length()==0){
+        if (args.length == 0) {
             System.out.print("Please enter a command.");
             System.exit(0);
         }
         String firstArg = args[0];
+        Repository repo = new Repository();
         switch(firstArg) {
             case "init":
                 validateNumArgs(args, 1);
-
+                repo.initGitlet();
                 break;
             case "add":
                 validateNumArgs(args, 2);
 
+
                 break;
             case "commit":
                 validateNumArgs(args, 2);
+
+
 
                 break;
             case "rm":
@@ -48,7 +52,7 @@ public class Main {
 
                 break;
             case "checkout":
-                // TODO validateNumArgs(args, 2);
+                validateNumArgs(args, 2);
 
                 break;
             case "branch":
@@ -81,6 +85,13 @@ public class Main {
      * @param n Number of expected arguments
      */
     public static void validateNumArgs(String[] args, int n) {
+        if (args[0] == "checkout"){
+            if (args.length < n) {
+                System.out.print("Incorrect operands.");
+                System.exit(0);
+            }
+            return;
+        }
         if (args.length != n) {
             System.out.print("Incorrect operands.");
             System.exit(0);

@@ -1,41 +1,42 @@
 package gitlet;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
+
 import static gitlet.Utils.*;
 
 
-/** Represents a gitlet repository.
- *  TODO: It's a good idea to give a description here of what else this Class
- *  does at a high level.
- *
- *  @author CuiYuxin
+/**
+ * Represents a gitlet repository.
+ * @author CuiYuxin
  */
-public class Repository {
-    /**
-     * TODO: add instance variables here.
-     *
-     * List all instance variables of the Repository class here with a useful
-     * comment above them describing what that variable represents and how that
-     * variable is used. We've provided two examples for you.
-     */
-
+public class Repository implements Serializable {
     /** The current working directory. */
     public static final File CWD = new File(System.getProperty("user.dir"));
     /** The .gitlet directory. */
     public static final File GITLET_DIR = join(CWD, ".gitlet");
+    /** The current commit. */
+    private static String head;
 
-    /** Init a gitlet repository.
-     *  @author CuiYuxin
+    /**
+     * Init a gitlet repository.
+     * @author CuiYuxin
      */
-    public static void initGitlet(){
+    public void initGitlet(){
         if (!GITLET_DIR.exists()){
-            CAPERS_FOLDER.mkdir();
-            // TODO
-
-
-
-
-
+            //create .gitlet directory
+            GITLET_DIR.mkdir();
+            //create init commit
+            Commit cmt = new Commit();
+            cmt.initCommit();
+            cmt.write();
+            //create master branch
+            Branch br = new Branch("master",Utils.sha1(cmt));
+            br.write();
+            //update repository status
+            head = Utils.sha1(cmt);
+            write();
         }
         else {
             System.out.print("A Gitlet version-control system already exists in the current directory.");
@@ -43,13 +44,19 @@ public class Repository {
         }
     }
 
+    /** Write repository status to disk.
+     *  @author:CuiYuxin */
+    public void write() {
+        String sp = System.getProperty("file.separator");
+        File repo = new File(".gitlet"+sp+"REPO");
+        if (!repo.exists()) {
+            try{
+                repo.createNewFile();
+            } catch (IOException e) {
+                //e.printStackTrace();
+            }
+        }
+        Utils.writeObject(repo, this);
+    }
 
-
-
-
-
-
-
-
-    /* TODO: fill in the rest of this class. */
 }
