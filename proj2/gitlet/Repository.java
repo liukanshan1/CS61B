@@ -3,6 +3,7 @@ package gitlet;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Map;
 
 import static gitlet.Utils.*;
 
@@ -18,6 +19,8 @@ public class Repository implements Serializable {
     public static final File GITLET_DIR = join(CWD, ".gitlet");
     /** The current commit. */
     private String head;
+    /** The current branch. */
+    private String branch;
 
     /**
      * Constructs a new repository.
@@ -30,6 +33,7 @@ public class Repository implements Serializable {
             if (repo.exists()) {
                 Repository repoObj = Utils.readObject(repo, Repository.class);
                 head = repoObj.head;
+                branch = repoObj.branch;
             }
         }
     }
@@ -49,6 +53,7 @@ public class Repository implements Serializable {
             //create master branch
             Branch br = new Branch("master",Utils.sha1(Utils.serialize(cmt)));
             br.write();
+            branch = "master";
             //update repository status
             write();
         }
@@ -82,6 +87,32 @@ public class Repository implements Serializable {
         }
         stage.add(fileName,blobName,head);
         stage.write();
+    }
+
+    /**
+     * Creating a new commit.
+     * @author CuiYuxin
+     */
+    public void commit(String message){
+        if (message == null || message.equals("")){
+            System.out.println("Please enter a commit message.");
+            System.exit(0);
+        }
+        Commit oldCmt = Commit.read(head); //read old commit
+        Stage stage = new Stage(); //read stage
+        if (stage.isEmpty()){
+            System.out.println("No changes added to the commit.");
+            System.exit(0);
+        }
+        Map<String,String> cmtMap = Commit.mergeBlobs(stage,oldCmt);
+        Commit cmt = new Commit(message,head,"",cmtMap); //create new commit
+        head = cmt.write(); //update head
+        stage.clear(); //clear stage
+        //read current branch and update branch
+        Branch br = Branch.read(branch);
+        br.update(head);
+        br.write();
+        write(); //update repository status
     }
 
     /**

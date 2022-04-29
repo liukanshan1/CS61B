@@ -26,7 +26,7 @@ public class Main {
                 break;
             case "commit":
                 validateNumArgs(args, 2);
-
+                repo.commit(args[1]);
                 break;
             case "rm":
                 validateNumArgs(args, 2);

@@ -9,9 +9,9 @@ import java.util.Map;
 
 public class Stage implements Serializable {
     /** The stage map. */
-    Map<String,String> blobmap = new java.util.HashMap<>();
-    /** Remove filename. */
-    List<String> removeFile = new ArrayList<>();
+    private Map<String,String> blobmap = new java.util.HashMap<>();
+    /** Remove filename. Key:filename Value:SHA1 */
+    private List<String> removeFile = new ArrayList<>();
 
     /**
      * Constructor for Stage.
@@ -26,6 +26,26 @@ public class Stage implements Serializable {
                 //e.printStackTrace();
             }
         }
+        else{
+            this.blobmap = Utils.readObject(stagefile, Stage.class).blobmap;
+            this.removeFile = Utils.readObject(stagefile, Stage.class).removeFile;
+        }
+    }
+
+    /**
+     * Return the stage map.
+     * @author CuiYuxin
+     */
+    public Map<String,String> getBlobmap() {
+        return blobmap;
+    }
+
+    /**
+     * Return the remove file list.
+     * @author CuiYuxin
+     */
+    public List<String> getRemoveFile() {
+        return removeFile;
     }
 
     /**
@@ -36,9 +56,7 @@ public class Stage implements Serializable {
         if (!this.blobmap.containsKey(fileName)) {
             this.blobmap.put(fileName, blobName);
         } else {
-            String sp = System.getProperty("file.separator");
-            File headCommit = new File(".gitlet" + sp + "commits" + sp + head);
-            Commit headObj = Utils.readObject(headCommit, Commit.class);
+            Commit headObj = Commit.read(head);
             if (headObj.getBlobs().get(fileName).equals(blobName)) {
                 this.blobmap.remove(fileName);
             } else {
@@ -48,24 +66,30 @@ public class Stage implements Serializable {
     }
 
     /**
+     * return if the stage is empty.
+     * @author CuiYuxin
+     */
+    public boolean isEmpty() {
+        return this.blobmap.isEmpty()&&this.removeFile.isEmpty();
+    }
+
+    /**
      * Remove a file from stage.
      * @author CuiYuxin
      */
     public void rm(String fileName,String head) {
-        boolean fail = false;
+        boolean fail = true;
         if (this.blobmap.containsKey(fileName)) {
-            fail = true;
+            fail = false;
             this.blobmap.remove(fileName);
         }
-        String sp = System.getProperty("file.separator");
-        File headCommit = new File(".gitlet" + sp + "commits" + sp + head);
-        Commit headObj = Utils.readObject(headCommit, Commit.class);
+        Commit headObj = Commit.read(head);
         if (headObj.getBlobs().containsKey(fileName)) {
-            fail = true;
+            fail = false;
             removeFile.add(fileName);
             Utils.restrictedDelete(fileName);
         }
-        if (!fail) {
+        if (fail) {
             System.out.println("No reason to remove the file.");
             System.exit(0);
         }
@@ -77,6 +101,15 @@ public class Stage implements Serializable {
     public void write() {
         File stageFile = new File(".gitlet/stage");
         Utils.writeObject(stageFile, this);
+    }
+
+    /** Clean the stage.
+     *  @author CuiYuxin
+     */
+    public void clear() {
+        blobmap = new java.util.HashMap<>();
+        removeFile = new ArrayList<>();
+        this.write();
     }
 
 }
