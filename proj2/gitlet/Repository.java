@@ -17,7 +17,22 @@ public class Repository implements Serializable {
     /** The .gitlet directory. */
     public static final File GITLET_DIR = join(CWD, ".gitlet");
     /** The current commit. */
-    private static String head;
+    private String head;
+
+    /**
+     * Constructs a new repository.
+     * @author CuiYuxin
+     */
+    public Repository() {
+        if (GITLET_DIR.exists()) {
+            String sp = System.getProperty("file.separator");
+            File repo = new File(".gitlet"+sp+"REPO");
+            if (repo.exists()) {
+                Repository repoObj = Utils.readObject(repo, Repository.class);
+                head = repoObj.head;
+            }
+        }
+    }
 
     /**
      * Init a gitlet repository.
@@ -30,18 +45,61 @@ public class Repository implements Serializable {
             //create init commit
             Commit cmt = new Commit();
             cmt.initCommit();
-            cmt.write();
+            head = cmt.write();
             //create master branch
-            Branch br = new Branch("master",Utils.sha1(cmt));
+            Branch br = new Branch("master",Utils.sha1(Utils.serialize(cmt)));
             br.write();
             //update repository status
-            head = Utils.sha1(cmt);
             write();
         }
         else {
             System.out.print("A Gitlet version-control system already exists in the current directory.");
             System.exit(0);
         }
+    }
+
+    /**
+     * Add a file to the staging area.
+     * @author CuiYuxin
+     */
+    public void add(String fileName){
+        File file = new File(fileName);
+        if (!file.exists()){
+            System.out.println("File does not exist.");
+            System.exit(0);
+        }
+        //copy file to blob directory
+        Blob blob = new Blob(file);
+        String blobName = blob.write();
+        //update staging area
+        File stageFile = new File(".gitlet/stage");
+        Stage stage;
+        if (stageFile.exists()) {
+            stage = Utils.readObject(stageFile, Stage.class);
+        }
+        else{
+            stage = new Stage();
+        }
+        stage.add(fileName,blobName,head);
+        stage.write();
+    }
+
+    /**
+     * Remove a file from the staging area.
+     * @author CuiYuxin
+     */
+    public void rm(String fileName){
+        //update staging area
+        File stageFile = new File(".gitlet/stage");
+        Stage stage;
+        if (stageFile.exists()) {
+            stage = Utils.readObject(stageFile, Stage.class);
+        }
+        else{
+            stage = new Stage();
+        }
+        stage.rm(fileName,head);
+        stage.write();
     }
 
     /** Write repository status to disk.

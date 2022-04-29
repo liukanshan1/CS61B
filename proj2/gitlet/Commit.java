@@ -2,10 +2,10 @@ package gitlet;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import static gitlet.Utils.join;
 
@@ -19,24 +19,24 @@ public class Commit implements Serializable {
     /** The commit directory. */
     public static final File COMMIT_DIR = join(CWD, ".gitlet","commits");
     /** The message of this Commit. */
-    private String message;
+    private String message = "";
     /** The SHA1 of parent. */
-    private String parent;
+    private String parent = "";
     /** The SHA1 of parent2. */
-    private String parent2;
+    private String parent2 = "";
     /** The TimeStamp of this Commit. */
-    private Date timeStamp;
-    /** The Blobs of this Commit. */
-    private List<String> blobs = new ArrayList<>();
+    private Date timeStamp = new Date();
+    /** The commit map. */
+    Map<String,String> commmitMap = new java.util.HashMap<>();
 
     /** Constructor
      *  @author:CuiYuxin */
-    public Commit(String message, String parent, String parent2, Date timeStamp, List<String> blobs) {
+    public Commit(String message, String parent, String parent2, Date timeStamp, Map<String,String> commmitMap) {
         this.message = message;
         this.parent = parent;
         this.parent2 = parent2;
         this.timeStamp = timeStamp;
-        this.blobs = blobs;
+        this.commmitMap = commmitMap;
     }
 
     /** Constructor
@@ -76,19 +76,19 @@ public class Commit implements Serializable {
         return timeStamp;
     }
 
-    /** Return the Blobs
+    /** Return the Map<String,String>
      *  @author:CuiYuxin */
-    public List<String> getBlobs() {
-        return blobs;
+    public Map<String,String> getBlobs() {
+        return commmitMap;
     }
 
-    /** Write this Commit
+    /** Write this Commit and return the filename(SHA1)
      *  @author:CuiYuxin */
-    public void write() {
+    public String write() {
         if (!COMMIT_DIR.exists()) {
             COMMIT_DIR.mkdir();
         }
-        String sha1 = Utils.sha1(this);
+        String sha1 = Utils.sha1(Utils.serialize(this));
         String sp = System.getProperty("file.separator");
         File commitFile = new File(".gitlet"+sp+"commits"+sp+sha1);
         if (!commitFile.exists()) {
@@ -99,6 +99,7 @@ public class Commit implements Serializable {
             }
         }
         Utils.writeObject(commitFile, this);
+        return sha1;
     }
 
 }

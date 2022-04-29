@@ -22,18 +22,15 @@ public class Main {
                 break;
             case "add":
                 validateNumArgs(args, 2);
-
-
+                repo.add(args[1]);
                 break;
             case "commit":
                 validateNumArgs(args, 2);
 
-
-
                 break;
             case "rm":
                 validateNumArgs(args, 2);
-
+                repo.rm(args[1]);
                 break;
             case "log":
                 validateNumArgs(args, 1);
@@ -85,7 +82,7 @@ public class Main {
      * @param n Number of expected arguments
      */
     public static void validateNumArgs(String[] args, int n) {
-        if (args[0] == "checkout"){
+        if (args[0].equals("checkout")){
             if (args.length < n) {
                 System.out.print("Incorrect operands.");
                 System.exit(0);
