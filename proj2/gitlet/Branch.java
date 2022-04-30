@@ -8,14 +8,14 @@ import java.util.List;
 import static gitlet.Utils.join;
 
 public class Branch implements Serializable  {
-    /** The name of the branch. */
-    private String name;
-    /** The commit SHA1 of the head of this branch. */
-    private String latestCommit;
     /** The current working directory. */
     public static final File CWD = new File(System.getProperty("user.dir"));
     /** The branch directory. */
     public static final File BRANCH_DIR = join(CWD, ".gitlet", "branches");
+    /** The name of the branch. */
+    private String name;
+    /** The commit SHA1 of the head of this branch. */
+    private String latestCommit;
 
     /**
      * Read a branch
@@ -28,6 +28,18 @@ public class Branch implements Serializable  {
             return null;
         }
         return Utils.readObject(branchFile, Branch.class);
+    }
+
+    /**
+     * Remove a branch.
+     * @author CuiYuxin
+     */
+    public static void remove(String branchName) {
+        String sp = File.separator;
+        File branchFile = new File(".gitlet" + sp + "branches" + sp + branchName);
+        if (!branchFile.isDirectory()) {
+            branchFile.delete();
+        }
     }
 
     /**

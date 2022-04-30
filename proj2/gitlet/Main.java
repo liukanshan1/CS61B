@@ -60,15 +60,15 @@ public class Main {
                 break;
             case "branch":
                 validateNumArgs(args, 2);
-
+                repo.createBranch(args[1]);
                 break;
             case "rm-branch":
                 validateNumArgs(args, 2);
-
+                repo.removeBranch(args[1]);
                 break;
             case "reset":
                 validateNumArgs(args, 2);
-
+                repo.reset(args[1]);
                 break;
             case "merage":
                 validateNumArgs(args, 2);

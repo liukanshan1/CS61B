@@ -275,10 +275,26 @@ public class Repository implements Serializable {
             System.out.println("No such branch exists.");
             System.exit(0);
         }
+        helpCheck(br.getLatestCommit());
+        // update repo
+        branch = branchName;
+        head = br.getLatestCommit();
+        write();
+        // update stage
+        Stage stage = new Stage();
+        stage.clear();
+        stage.write();
+    }
+
+    /**
+     * A helping method for checkout.
+     * @author CuiYuxin
+     */
+    private void helpCheck(String commitID) {
         // current directory files
         List<String> curDirFiles = Utils.plainFilenamesIn(new File("./"));
         // other branch's latest commit
-        Commit cmt = Commit.read(br.getLatestCommit());
+        Commit cmt = Commit.read(commitID);
         Set<String> cmtFiles = cmt.getBlobs().keySet();
         // current branch's latest commit
         Commit curCmt = Commit.read(head);
@@ -304,9 +320,50 @@ public class Repository implements Serializable {
                 Utils.restrictedDelete(new File(file));
             }
         }
+    }
+
+    /**
+     * Create a new branch.
+     * @author CuiYuxin
+     */
+    public void createBranch(String branchName) {
+        if (Branch.allBranches().contains(branchName)){
+            System.out.println("A branch with that name already exists.");
+            System.exit(0);
+        }
+        Branch br = new Branch(branchName, head);
+        br.write();
+    }
+
+    /**
+     * Remove a branch.
+     * @author CuiYuxin
+     */
+    public void removeBranch(String branchName) {
+        if (!Branch.allBranches().contains(branchName)){
+            System.out.println("A branch with that name does not exist.");
+            System.exit(0);
+        }
+        if (branchName.equals(branch)) {
+            System.out.println("Cannot remove the current branch.");
+            System.exit(0);
+        }
+        Branch.remove(branchName);
+    }
+
+    /**
+     * Checkout a commit.
+     * @author CuiYuxin
+     */
+    public void reset(String commitID) {
+        Commit cmt = Commit.read(commitID);
+        if (cmt == null) {
+            System.out.println("No commit with that id exists.");
+            System.exit(0);
+        }
+        helpCheck(commitID);
         // update repo
-        branch = branchName;
-        head = br.getLatestCommit();
+        head = Utils.sha1(Utils.serialize(cmt));
         write();
         // update stage
         Stage stage = new Stage();
