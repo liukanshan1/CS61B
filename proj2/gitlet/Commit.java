@@ -29,7 +29,8 @@ public class Commit implements Serializable {
     Map<String,String> commmitMap = new java.util.HashMap<>();
 
     /** Constructor
-     *  @author CuiYuxin */
+     *  @author CuiYuxin
+     */
     public Commit(String message, String parent, String parent2, Map<String,String> commmitMap) {
         this.message = message;
         this.parent = parent;
@@ -39,11 +40,13 @@ public class Commit implements Serializable {
     }
 
     /** Constructor
-     *  @author CuiYuxin */
+     *  @author CuiYuxin
+     */
     public Commit() {}
 
     /** Init first commit
-     *  @author CuiYuxin */
+     *  @author CuiYuxin
+     */
     public void initCommit() {
         this.message = "initial commit";
         this.parent = "";
@@ -58,7 +61,8 @@ public class Commit implements Serializable {
 //    }
 
     /** Return the parent1
-     *  @author CuiYuxin */
+     *  @author CuiYuxin
+     */
     public String getParent() {
         return parent;
     }
@@ -76,13 +80,15 @@ public class Commit implements Serializable {
 //    }
 
     /** Return the Map<String,String>
-     *  @author CuiYuxin */
+     *  @author CuiYuxin
+     */
     public Map<String,String> getBlobs() {
         return commmitMap;
     }
 
     /** Write this Commit and return the filename(SHA1)
-     *  @author CuiYuxin */
+     *  @author CuiYuxin
+     */
     public String write() {
         if (!COMMIT_DIR.exists()) {
             COMMIT_DIR.mkdir();
@@ -109,14 +115,24 @@ public class Commit implements Serializable {
         return Utils.readObject(commitFile, Commit.class);
     }
 
+    /** Return the commit log
+     *  @author CuiYuxin
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("===\n");
+        // SHA1
         sb.append("commit ").append(Utils.sha1(Utils.serialize(this))).append("\n");
+        // Merge
+        if (!parent2.equals("")) {
+            sb.append("Merge: ").append(parent.substring(0,7)).append(" ").append(parent2.substring(0,7)).append("\n");
+        }
+        // TimeStamp
         sb.append("Date: ");
         SimpleDateFormat format = new SimpleDateFormat("E MMM dd HH:mm:ss yyyy Z");
         sb.append(format.format(timeStamp)).append("\n");
+        // Message
         sb.append(message).append("\n");
         return sb.toString();
     }
@@ -134,5 +150,18 @@ public class Commit implements Serializable {
             map.put(entry.getKey(), entry.getValue());
         }
         return map;
+    }
+
+    /** Return all commit log
+     * @author CuiYuxin
+     */
+    public static List<String> getCommitLog() {
+        List<String> commits = Utils.plainFilenamesIn(COMMIT_DIR);
+        List<String> commitLog = new ArrayList<>();
+        for (String commit : commits) {
+            Commit cmt = read(commit);
+            commitLog.add(cmt.toString());
+        }
+        return commitLog;
     }
 }

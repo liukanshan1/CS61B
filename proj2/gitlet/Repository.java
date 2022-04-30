@@ -3,6 +3,7 @@ package gitlet;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 import static gitlet.Utils.*;
@@ -133,7 +134,6 @@ public class Repository implements Serializable {
         stage.write();
     }
 
-
     /**
      * Print the log the current branch.
      * @author CuiYuxin
@@ -147,6 +147,16 @@ public class Repository implements Serializable {
         }
     }
 
+    /**
+     * Print all commit.
+     * @author CuiYuxin
+     */
+    public void globalLog(){
+        List<String> cmtLogs = Commit.getCommitLog();
+        for (String cmtLog : cmtLogs){
+            System.out.print(cmtLog);
+        }
+    }
 
     /** Write repository status to disk.
      *  @author:CuiYuxin */

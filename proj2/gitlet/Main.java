@@ -42,7 +42,7 @@ public class Main {
                 break;
             case "global-log":
                 validateNumArgs(args, 1);
-
+                repo.globalLog();
                 break;
             case "find":
                 validateNumArgs(args, 2);
