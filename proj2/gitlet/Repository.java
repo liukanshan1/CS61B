@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static gitlet.Utils.*;
 
@@ -274,24 +275,42 @@ public class Repository implements Serializable {
             System.out.println("No such branch exists.");
             System.exit(0);
         }
-        // TODO
-
-
-
-//        if (cmtID.equals("head")) {
-//            cmtID = head;
-//        }
-//        Commit cmt = Commit.read(cmtID);
-//        if (cmt == null) {
-//            System.out.println("No commit with that id exists.");
-//            System.exit(0);
-//        }
-//        if (!cmt.getBlobs().containsKey(fileName)) {
-//            System.out.println("File does not exist in that commit.");
-//            System.exit(0);
-//        }
-//        String fileID = cmt.getBlobs().get(fileName);
-//        byte[] fileContent = Blob.getBlob(fileID);
-//        Utils.writeContents(new File(fileName), fileContent);
+        // current directory files
+        List<String> curDirFiles = Utils.plainFilenamesIn(new File("./"));
+        // other branch's latest commit
+        Commit cmt = Commit.read(br.getLatestCommit());
+        Set<String> cmtFiles = cmt.getBlobs().keySet();
+        // current branch's latest commit
+        Commit curCmt = Commit.read(head);
+        Set<String> curCmtFiles = curCmt.getBlobs().keySet();
+        for (String fileName : curDirFiles) {
+            if (!curCmt.getBlobs().containsKey(fileName)) {
+                if (cmtFiles.contains(fileName)) {
+                    String fileID = cmt.getBlobs().get(fileName);
+                    if (!fileID.equals(Utils.readContents(new File(fileName)))) {
+                        System.out.print("There is an untracked file in the way;");
+                        System.out.print(" delete it, or add and commit it first.\n");
+                        System.exit(0);
+                    }
+                }
+            }
+        }
+        for (String file : cmtFiles) {
+            byte[] fileContent = Blob.getBlob(cmt.getBlobs().get(file));
+            Utils.writeContents(new File(file), fileContent);
+        }
+        for (String file : curCmtFiles) {
+            if (!cmtFiles.contains(file)) {
+                Utils.restrictedDelete(new File(file));
+            }
+        }
+        // update repo
+        branch = branchName;
+        head = br.getLatestCommit();
+        write();
+        // update stage
+        Stage stage = new Stage();
+        stage.clear();
+        stage.write();
     }
 }
