@@ -98,7 +98,7 @@ public class Commit implements Serializable {
             COMMIT_DIR.mkdir();
         }
         String sha1 = Utils.sha1(Utils.serialize(this));
-        String sp = "/";
+        String sp = File.separator;
         File commitFile = new File(".gitlet" + sp + "commits" + sp + sha1);
         if (!commitFile.exists()) {
             try {
@@ -122,7 +122,7 @@ public class Commit implements Serializable {
                 }
             }
         }
-        String sp = "/";
+        String sp = File.separator;
         File commitFile = new File(".gitlet" + sp + "commits" + sp + sha1);
         if (!commitFile.exists()) {
             return null;

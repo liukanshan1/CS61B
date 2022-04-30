@@ -33,7 +33,7 @@ public class Blob implements Serializable {
      *  @author CuiYuxin
      */
     public String write() {
-        String sp = "/";
+        String sp = File.separator;
         String fileName = Utils.sha1(Utils.serialize(this));
         File blobFile = new File(".gitlet" + sp + "blobs" + sp + fileName);
         if (!blobFile.exists()) {
@@ -52,7 +52,7 @@ public class Blob implements Serializable {
      * @author CuiYuxin
      */
     public static byte[] getBlob(String blobID) {
-        String sp = "/";
+        String sp = File.separator;
         File blob = new File(".gitlet" + sp + "blobs" + sp + blobID);
         Blob b = Utils.readObject(blob, Blob.class);
         return b.blob;
