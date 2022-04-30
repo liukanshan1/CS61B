@@ -59,7 +59,7 @@ public class Repository implements Serializable {
             write();
         }
         else {
-            System.out.print("A Gitlet version-control system already exists in the current directory.");
+            System.out.println("A Gitlet version-control system already exists in the current directory.");
             System.exit(0);
         }
     }
@@ -155,8 +155,67 @@ public class Repository implements Serializable {
         List<String> cmtLogs = Commit.getCommitLog();
         for (String cmtLog : cmtLogs){
             System.out.print(cmtLog);
+            System.out.print("\n");
         }
     }
+
+    /**
+     * Print the status of the repository.
+     * @author CuiYuxin
+     */
+    public void status(){
+        // Branch status
+        System.out.println("=== Branches ===");
+        for (String branch : Branch.allBranches()) {
+            if (branch.equals(this.branch)) {
+                System.out.println("*" + branch);
+            } else {
+                System.out.println(branch);
+            }
+        }
+        System.out.println();
+        // Staged files
+        Stage stage = new Stage();
+        System.out.println("=== Staged Files ===");
+        for (String fileName : stage.getStagedFiles()) {
+            System.out.println(fileName);
+        }
+        System.out.println();
+        // Removed files
+        System.out.println("=== Removed Files ===");
+        for (String fileName : stage.getRemovedFiles()) {
+            System.out.println(fileName);
+        }
+        System.out.println();
+        // Unstaged files
+        System.out.println("=== Modifications Not Staged For Commit ===");
+        for (String fileName : stage.getUnstagedFiles(head)) {
+            System.out.println(fileName);
+        }
+        System.out.println();
+        // Untracked files
+        System.out.println("=== Untracked Files ===");
+        for (String fileName : stage.getUntrackedFiles(head)) {
+            System.out.println(fileName);
+        }
+        System.out.println();
+    }
+
+    /**
+     * Find the commit which has given message.
+     * @author CuiYuxin
+     */
+    public void find(String message){
+        List<String> cmtID = Commit.find(message);
+        if (cmtID.size() == 0){
+            System.out.println("Found no commit with that message.");
+            System.exit(0);
+        }
+        for (String cmt : cmtID){
+            System.out.println(cmt);
+        }
+    }
+
 
     /** Write repository status to disk.
      *  @author:CuiYuxin */

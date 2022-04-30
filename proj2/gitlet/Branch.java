@@ -3,6 +3,7 @@ package gitlet;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.List;
 
 import static gitlet.Utils.join;
 
@@ -18,7 +19,7 @@ public class Branch implements Serializable  {
 
     /**
      * Read a branch
-     * @author: CuiYuxin
+     * @author CuiYuxin
      */
     public static Branch read(String name) {
         String sp = System.getProperty("file.separator");
@@ -28,7 +29,7 @@ public class Branch implements Serializable  {
 
     /**
      * Update branch latest commit.
-     * @author: CuiYuxin
+     * @author CuiYuxin
      */
     public void update(String latestCommit) {
         this.latestCommit = latestCommit;
@@ -36,7 +37,7 @@ public class Branch implements Serializable  {
 
     /**
      * Creates a new branch
-     * @author: CuiYuxin
+     * @author CuiYuxin
      */
     public Branch(String name, String latestCommit) {
         this.name = name;
@@ -45,7 +46,7 @@ public class Branch implements Serializable  {
 
     /**
      * Write this Branch.
-     * @author: CuiYuxin
+     * @author CuiYuxin
      */
     public void write() {
         if (!BRANCH_DIR.exists()) {
@@ -63,4 +64,11 @@ public class Branch implements Serializable  {
         Utils.writeObject(branchFile, this);
     }
 
+    /**
+     * Return all branches.
+     * @author CuiYuxin
+     */
+    public static List<String> allBranches() {
+        return Utils.plainFilenamesIn(BRANCH_DIR);
+    }
 }

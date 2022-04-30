@@ -10,14 +10,10 @@ public class Main {
      */
     public static void main(String[] args) {
         if (args.length == 0) {
-            System.out.print("Please enter a command.");
+            System.out.print("Please enter a command.\n");
             System.exit(0);
         }
         String firstArg = args[0];
-        if(!firstArg.equals("init")&&!Repository.isRepo()) {
-            System.out.print("Not in an initialized Gitlet directory.");
-            System.exit(0);
-        }
         Repository repo = new Repository();
         switch(firstArg) {
             case "init":
@@ -46,11 +42,11 @@ public class Main {
                 break;
             case "find":
                 validateNumArgs(args, 2);
-
+                repo.find(args[1]);
                 break;
             case "status":
                 validateNumArgs(args, 1);
-
+                repo.status();
                 break;
             case "checkout":
                 validateNumArgs(args, 2);
@@ -73,7 +69,7 @@ public class Main {
 
                 break;
             default:
-                System.out.print("No command with that name exists.");
+                System.out.print("No command with that name exists.\n");
                 System.exit(0);
         }
     }
@@ -86,15 +82,19 @@ public class Main {
      * @param n Number of expected arguments
      */
     public static void validateNumArgs(String[] args, int n) {
+        if(!args[0].equals("init")&&!Repository.isRepo()) {
+            System.out.print("Not in an initialized Gitlet directory.\n");
+            System.exit(0);
+        }
         if (args[0].equals("checkout")){
             if (args.length < n) {
-                System.out.print("Incorrect operands.");     // TODO: fix this
+                System.out.print("Incorrect operands.\n");     // TODO: fix this
                 System.exit(0);
             }
             return;
         }
         if (args.length != n) {
-            System.out.print("Incorrect operands.");
+            System.out.print("Incorrect operands.\n");
             System.exit(0);
         }
     }

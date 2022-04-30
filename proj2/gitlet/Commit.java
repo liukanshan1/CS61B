@@ -137,6 +137,21 @@ public class Commit implements Serializable {
         return sb.toString();
     }
 
+    /** Return the commit ID which has the given message
+     *  @author CuiYuxin
+     */
+    public static List<String> find(String message) {
+        List<String> commitID = new ArrayList<>();
+        List<String> commits = Utils.plainFilenamesIn(COMMIT_DIR);
+        for (String commit : commits) {
+            Commit cmt = read(commit);
+            if (cmt.message.equals(message)) {
+                commitID.add(Utils.sha1(Utils.serialize(cmt)));
+            }
+        }
+        return commitID;
+    }
+
     /** Create new Blobs
      * @author CuiYuxin
      */

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +23,7 @@ public class Stage implements Serializable {
         if (!stagefile.exists()) {
             try{
                 stagefile.createNewFile();
+                write();
             } catch (IOException e) {
                 //e.printStackTrace();
             }
@@ -111,4 +113,75 @@ public class Stage implements Serializable {
         this.write();
     }
 
+    /** Return staged filename.
+     *  @author CuiYuxin
+     */
+    public String[] getStagedFiles() {
+        String[] files = blobmap.keySet().toArray(new String[0]);
+        Arrays.sort(files);
+        return files;
+    }
+
+    /** Return removed filename.
+     *  @author CuiYuxin
+     */
+    public String[] getRemovedFiles() {
+        String[] files = removeFile.toArray(new String[0]);
+        Arrays.sort(files);
+        return files;
+    }
+
+    /** Return modified  but not staged for commit filename and type.
+     *  @author CuiYuxin
+     */
+    public String[] getUnstagedFiles(String head) {
+        List<String> unstaged = new ArrayList<>();
+        List<String> allFiles = Utils.plainFilenamesIn("./");
+        Commit headObj = Commit.read(head);
+        for (String file : allFiles) {
+            File f = new File(file);
+            Blob b = new Blob(f);
+            String sha1 = Utils.sha1(Utils.serialize(b));
+            if (headObj.getBlobs().containsKey(file)&&!blobmap.containsKey(file)) {
+                if(!sha1.equals(headObj.getBlobs().get(file))) {
+                    unstaged.add(file+" (modified)");
+                }
+            } else if (blobmap.containsKey(file)&&!sha1.equals(blobmap.get(file))) {
+                unstaged.add(file+" (modified)");
+            }
+        }
+        for(String file : blobmap.keySet()) {
+            if (!allFiles.contains(file)) {
+                unstaged.add(file+" (deleted)");
+            }
+        }
+        for (String file : headObj.getBlobs().keySet()) {
+            if (!allFiles.contains(file)&&!removeFile.contains(file)&&!unstaged.contains(file+" (deleted)")) {
+                unstaged.add(file+" (deleted)");
+            }
+        }
+        String[] files = unstaged.toArray(new String[0]);
+        Arrays.sort(files);
+        return files;
+    }
+
+    public String[] getUntrackedFiles(String head) {
+        List<String> untracked = new ArrayList<>();
+        List<String> allFiles = Utils.plainFilenamesIn("./");
+        Commit headCmt = Commit.read(head);
+        for (String file : allFiles) {
+            if (!this.blobmap.containsKey(file)) {
+                if (!headCmt.getBlobs().containsKey(file)) {
+                    untracked.add(file);
+                } else {
+                    if(this.removeFile.contains(file)) {
+                        untracked.add(file);
+                    }
+                }
+            }
+        }
+        String[] files = untracked.toArray(new String[0]);
+        Arrays.sort(files);
+        return files;
+    }
 }
