@@ -14,7 +14,7 @@ public class Blob implements Serializable {
     /** The current working directory. */
     public static final File CWD = new File(System.getProperty("user.dir"));
     /** The Blob directory. */
-    public static final File BLOB_DIR = join(CWD, ".gitlet","blobs");
+    public static final File BLOB_DIR = join(CWD, ".gitlet", "blobs");
     /** The Blob file. */
     byte[] blob;
 
@@ -35,16 +35,26 @@ public class Blob implements Serializable {
     public String write() {
         String sp = System.getProperty("file.separator");
         String fileName = Utils.sha1(Utils.serialize(this));
-        File blob = new File(".gitlet"+sp+"blobs"+sp+fileName);
-        if (!blob.exists()) {
-            try{
-                blob.createNewFile();
+        File blobFile = new File(".gitlet" + sp + "blobs" + sp + fileName);
+        if (!blobFile.exists()) {
+            try {
+                blobFile.createNewFile();
             } catch (IOException e) {
                 //e.printStackTrace();
             }
-            Utils.writeObject(blob, this);
+            Utils.writeObject(blobFile, this);
         }
         return fileName;
     }
 
+    /**
+     * Get the file.
+     * @author CuiYuxin
+     */
+    public static byte[] getBlob(String blobID) {
+        String sp = System.getProperty("file.separator");
+        File blob = new File(".gitlet" + sp + "blobs" + sp + blobID);
+        Blob b = Utils.readObject(blob, Blob.class);
+        return b.blob;
+    }
 }

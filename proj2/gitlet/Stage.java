@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class Stage implements Serializable {
     /** The stage map. */
-    private Map<String,String> blobmap = new java.util.HashMap<>();
+    private Map<String, String> blobmap = new java.util.HashMap<>();
     /** Remove filename. Key:filename Value:SHA1 */
     private List<String> removeFile = new ArrayList<>();
 
@@ -21,14 +21,13 @@ public class Stage implements Serializable {
     public Stage() {
         File stagefile = new File(".gitlet/stage");
         if (!stagefile.exists()) {
-            try{
+            try {
                 stagefile.createNewFile();
                 write();
             } catch (IOException e) {
                 //e.printStackTrace();
             }
-        }
-        else{
+        } else {
             this.blobmap = Utils.readObject(stagefile, Stage.class).blobmap;
             this.removeFile = Utils.readObject(stagefile, Stage.class).removeFile;
         }
@@ -38,7 +37,7 @@ public class Stage implements Serializable {
      * Return the stage map.
      * @author CuiYuxin
      */
-    public Map<String,String> getBlobmap() {
+    public Map<String, String> getBlobmap() {
         return blobmap;
     }
 
@@ -56,8 +55,8 @@ public class Stage implements Serializable {
      */
     public void add(String fileName, String blobName, String head) {
         Commit headObj = Commit.read(head);
-        Map<String,String> oldBlobs = headObj.getBlobs();
-        if (oldBlobs.getOrDefault(fileName,"").equals(blobName)) {
+        Map<String, String> oldBlobs = headObj.getBlobs();
+        if (oldBlobs.getOrDefault(fileName, "").equals(blobName)) {
             if (this.blobmap.containsKey(fileName)) {
                 this.blobmap.remove(fileName);
             }
@@ -71,14 +70,14 @@ public class Stage implements Serializable {
      * @author CuiYuxin
      */
     public boolean isEmpty() {
-        return this.blobmap.isEmpty()&&this.removeFile.isEmpty();
+        return this.blobmap.isEmpty() && this.removeFile.isEmpty();
     }
 
     /**
      * Remove a file from stage.
      * @author CuiYuxin
      */
-    public void rm(String fileName,String head) {
+    public void rm(String fileName, String head) {
         boolean fail = true;
         if (this.blobmap.containsKey(fileName)) {
             fail = false;
@@ -131,7 +130,7 @@ public class Stage implements Serializable {
         return files;
     }
 
-    /** Return modified  but not staged for commit filename and type.
+    /** Return modified but not staged for commit filename and type.
      *  @author CuiYuxin
      */
     public String[] getUnstagedFiles(String head) {
@@ -142,22 +141,24 @@ public class Stage implements Serializable {
             File f = new File(file);
             Blob b = new Blob(f);
             String sha1 = Utils.sha1(Utils.serialize(b));
-            if (headObj.getBlobs().containsKey(file)&&!blobmap.containsKey(file)) {
-                if(!sha1.equals(headObj.getBlobs().get(file))) {
-                    unstaged.add(file+" (modified)");
+            if (headObj.getBlobs().containsKey(file) && !blobmap.containsKey(file)) {
+                if (!sha1.equals(headObj.getBlobs().get(file))) {
+                    unstaged.add(file + " (modified)");
                 }
-            } else if (blobmap.containsKey(file)&&!sha1.equals(blobmap.get(file))) {
-                unstaged.add(file+" (modified)");
+            } else if (blobmap.containsKey(file) && !sha1.equals(blobmap.get(file))) {
+                unstaged.add(file + " (modified)");
             }
         }
-        for(String file : blobmap.keySet()) {
+        for (String file : blobmap.keySet()) {
             if (!allFiles.contains(file)) {
-                unstaged.add(file+" (deleted)");
+                unstaged.add(file + " (deleted)");
             }
         }
         for (String file : headObj.getBlobs().keySet()) {
-            if (!allFiles.contains(file)&&!removeFile.contains(file)&&!unstaged.contains(file+" (deleted)")) {
-                unstaged.add(file+" (deleted)");
+            if (!allFiles.contains(file) && !removeFile.contains(file)) {
+                if (!unstaged.contains(file + " (deleted)")) {
+                    unstaged.add(file + " (deleted)");
+                }
             }
         }
         String[] files = unstaged.toArray(new String[0]);
@@ -165,6 +166,9 @@ public class Stage implements Serializable {
         return files;
     }
 
+    /** Return the untracked filename.
+     *  @author CuiYuxin
+     */
     public String[] getUntrackedFiles(String head) {
         List<String> untracked = new ArrayList<>();
         List<String> allFiles = Utils.plainFilenamesIn("./");
@@ -174,7 +178,7 @@ public class Stage implements Serializable {
                 if (!headCmt.getBlobs().containsKey(file)) {
                     untracked.add(file);
                 } else {
-                    if(this.removeFile.contains(file)) {
+                    if (this.removeFile.contains(file)) {
                         untracked.add(file);
                     }
                 }

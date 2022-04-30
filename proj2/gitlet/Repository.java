@@ -30,7 +30,7 @@ public class Repository implements Serializable {
     public Repository() {
         if (GITLET_DIR.exists()) {
             String sp = System.getProperty("file.separator");
-            File repo = new File(".gitlet"+sp+"REPO");
+            File repo = new File(".gitlet" + sp + "REPO");
             if (repo.exists()) {
                 Repository repoObj = Utils.readObject(repo, Repository.class);
                 head = repoObj.head;
@@ -43,8 +43,8 @@ public class Repository implements Serializable {
      * Init a gitlet repository.
      * @author CuiYuxin
      */
-    public void initGitlet(){
-        if (!GITLET_DIR.exists()){
+    public void initGitlet() {
+        if (!GITLET_DIR.exists()) {
             //create .gitlet directory
             GITLET_DIR.mkdir();
             //create init commit
@@ -52,14 +52,14 @@ public class Repository implements Serializable {
             cmt.initCommit();
             head = cmt.write();
             //create master branch
-            Branch br = new Branch("master",Utils.sha1(Utils.serialize(cmt)));
+            Branch br = new Branch("master", Utils.sha1(Utils.serialize(cmt)));
             br.write();
             branch = "master";
             //update repository status
             write();
-        }
-        else {
-            System.out.println("A Gitlet version-control system already exists in the current directory.");
+        } else {
+            String e = "A Gitlet version-control system already exists in the current directory.";
+            System.out.println(e);
             System.exit(0);
         }
     }
@@ -68,9 +68,9 @@ public class Repository implements Serializable {
      * Add a file to the staging area.
      * @author CuiYuxin
      */
-    public void add(String fileName){
+    public void add(String fileName) {
         File file = new File(fileName);
-        if (!file.exists()){
+        if (!file.exists()) {
             System.out.println("File does not exist.");
             System.exit(0);
         }
@@ -82,11 +82,10 @@ public class Repository implements Serializable {
         Stage stage;
         if (stageFile.exists()) {
             stage = Utils.readObject(stageFile, Stage.class);
-        }
-        else{
+        } else {
             stage = new Stage();
         }
-        stage.add(fileName,blobName,head);
+        stage.add(fileName, blobName, head);
         stage.write();
     }
 
@@ -94,19 +93,19 @@ public class Repository implements Serializable {
      * Creating a new commit.
      * @author CuiYuxin
      */
-    public void commit(String message){
-        if (message == null || message.equals("")){
+    public void commit(String message) {
+        if (message == null || message.equals("")) {
             System.out.println("Please enter a commit message.");
             System.exit(0);
         }
         Commit oldCmt = Commit.read(head); //read old commit
         Stage stage = new Stage(); //read stage
-        if (stage.isEmpty()){
+        if (stage.isEmpty()) {
             System.out.println("No changes added to the commit.");
             System.exit(0);
         }
-        Map<String,String> cmtMap = Commit.mergeBlobs(stage,oldCmt);
-        Commit cmt = new Commit(message,head,"",cmtMap); //create new commit
+        Map<String, String> cmtMap = Commit.mergeBlobs(stage, oldCmt);
+        Commit cmt = new Commit(message, head, "", cmtMap); //create new commit
         head = cmt.write(); //update head
         stage.clear(); //clear stage
         //read current branch and update branch
@@ -120,17 +119,16 @@ public class Repository implements Serializable {
      * Remove a file from the staging area.
      * @author CuiYuxin
      */
-    public void rm(String fileName){
+    public void rm(String fileName) {
         //update staging area
         File stageFile = new File(".gitlet/stage");
         Stage stage;
         if (stageFile.exists()) {
             stage = Utils.readObject(stageFile, Stage.class);
-        }
-        else{
+        } else {
             stage = new Stage();
         }
-        stage.rm(fileName,head);
+        stage.rm(fileName, head);
         stage.write();
     }
 
@@ -138,9 +136,9 @@ public class Repository implements Serializable {
      * Print the log the current branch.
      * @author CuiYuxin
      */
-    public void log(){
+    public void log() {
         String cmtID = head;
-        while (!cmtID.equals("")){
+        while (!cmtID.equals("")) {
             Commit cmt = Commit.read(cmtID);
             System.out.println(cmt.toString());
             cmtID = cmt.getParent();
@@ -151,9 +149,9 @@ public class Repository implements Serializable {
      * Print all commit.
      * @author CuiYuxin
      */
-    public void globalLog(){
+    public void globalLog() {
         List<String> cmtLogs = Commit.getCommitLog();
-        for (String cmtLog : cmtLogs){
+        for (String cmtLog : cmtLogs) {
             System.out.print(cmtLog);
             System.out.print("\n");
         }
@@ -163,14 +161,14 @@ public class Repository implements Serializable {
      * Print the status of the repository.
      * @author CuiYuxin
      */
-    public void status(){
+    public void status() {
         // Branch status
         System.out.println("=== Branches ===");
-        for (String branch : Branch.allBranches()) {
-            if (branch.equals(this.branch)) {
-                System.out.println("*" + branch);
+        for (String branchName : Branch.allBranches()) {
+            if (branchName.equals(this.branch)) {
+                System.out.println("*" + branchName);
             } else {
-                System.out.println(branch);
+                System.out.println(branchName);
             }
         }
         System.out.println();
@@ -205,25 +203,25 @@ public class Repository implements Serializable {
      * Find the commit which has given message.
      * @author CuiYuxin
      */
-    public void find(String message){
+    public void find(String message) {
         List<String> cmtID = Commit.find(message);
-        if (cmtID.size() == 0){
+        if (cmtID.size() == 0) {
             System.out.println("Found no commit with that message.");
             System.exit(0);
         }
-        for (String cmt : cmtID){
+        for (String cmt : cmtID) {
             System.out.println(cmt);
         }
     }
 
 
     /** Write repository status to disk.
-     *  @author:CuiYuxin */
+     *  @author CuiYuxin */
     public void write() {
         String sp = System.getProperty("file.separator");
-        File repo = new File(".gitlet"+sp+"REPO");
+        File repo = new File(".gitlet" + sp + "REPO");
         if (!repo.exists()) {
-            try{
+            try {
                 repo.createNewFile();
             } catch (IOException e) {
                 //e.printStackTrace();
@@ -236,8 +234,64 @@ public class Repository implements Serializable {
      * Check if current folder is a repository.
      * @author CuiYuxin
      */
-    public static boolean isRepo(){
+    public static boolean isRepo() {
         return GITLET_DIR.exists();
     }
 
+    /**
+     * Checkout file in given commit.
+     * @author CuiYuxin
+     */
+    public void checkout(String cmtID, String fileName) {
+        if (cmtID.equals("head")) {
+            cmtID = head;
+        }
+        Commit cmt = Commit.read(cmtID);
+        if (cmt == null) {
+            System.out.println("No commit with that id exists.");
+            System.exit(0);
+        }
+        if (!cmt.getBlobs().containsKey(fileName)) {
+            System.out.println("File does not exist in that commit.");
+            System.exit(0);
+        }
+        String fileID = cmt.getBlobs().get(fileName);
+        byte[] fileContent = Blob.getBlob(fileID);
+        Utils.writeContents(new File(fileName), fileContent);
+    }
+
+    /**
+     * Checkout branch.
+     * @author CuiYuxin
+     */
+    public void checkout(String branchName) {
+        if (branchName.equals(branch)) {
+            System.out.println("No need to checkout the current branch.");
+            System.exit(0);
+        }
+        Branch br = Branch.read(branchName);
+        if (br == null) {
+            System.out.println("No such branch exists.");
+            System.exit(0);
+        }
+        // TODO
+
+
+
+//        if (cmtID.equals("head")) {
+//            cmtID = head;
+//        }
+//        Commit cmt = Commit.read(cmtID);
+//        if (cmt == null) {
+//            System.out.println("No commit with that id exists.");
+//            System.exit(0);
+//        }
+//        if (!cmt.getBlobs().containsKey(fileName)) {
+//            System.out.println("File does not exist in that commit.");
+//            System.exit(0);
+//        }
+//        String fileID = cmt.getBlobs().get(fileName);
+//        byte[] fileContent = Blob.getBlob(fileID);
+//        Utils.writeContents(new File(fileName), fileContent);
+    }
 }

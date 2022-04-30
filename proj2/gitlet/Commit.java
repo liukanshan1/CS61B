@@ -3,8 +3,11 @@ package gitlet;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
 import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 
 import static gitlet.Utils.join;
 
@@ -16,7 +19,7 @@ public class Commit implements Serializable {
     /** The current working directory. */
     public static final File CWD = new File(System.getProperty("user.dir"));
     /** The commit directory. */
-    public static final File COMMIT_DIR = join(CWD, ".gitlet","commits");
+    public static final File COMMIT_DIR = join(CWD, ".gitlet", "commits");
     /** The message of this Commit. */
     private String message = "";
     /** The SHA1 of parent. */
@@ -26,12 +29,12 @@ public class Commit implements Serializable {
     /** The TimeStamp of this Commit. */
     private Date timeStamp = new Date();
     /** The commit map. Key:filename Value:SHA1 */
-    Map<String,String> commmitMap = new java.util.HashMap<>();
+    Map<String, String> commmitMap = new java.util.HashMap<>();
 
     /** Constructor
      *  @author CuiYuxin
      */
-    public Commit(String message, String parent, String parent2, Map<String,String> commmitMap) {
+    public Commit(String message, String parent, String parent2, Map<String, String> commmitMap) {
         this.message = message;
         this.parent = parent;
         this.parent2 = parent2;
@@ -42,7 +45,8 @@ public class Commit implements Serializable {
     /** Constructor
      *  @author CuiYuxin
      */
-    public Commit() {}
+    public Commit() {
+    }
 
     /** Init first commit
      *  @author CuiYuxin
@@ -50,7 +54,7 @@ public class Commit implements Serializable {
     public void initCommit() {
         this.message = "initial commit";
         this.parent = "";
-        this.parent2 ="";
+        this.parent2 = "";
         this.timeStamp.setTime(0);
     }
 
@@ -82,7 +86,7 @@ public class Commit implements Serializable {
     /** Return the Map<String,String>
      *  @author CuiYuxin
      */
-    public Map<String,String> getBlobs() {
+    public Map<String, String> getBlobs() {
         return commmitMap;
     }
 
@@ -95,9 +99,9 @@ public class Commit implements Serializable {
         }
         String sha1 = Utils.sha1(Utils.serialize(this));
         String sp = System.getProperty("file.separator");
-        File commitFile = new File(".gitlet"+sp+"commits"+sp+sha1);
+        File commitFile = new File(".gitlet" + sp + "commits" + sp + sha1);
         if (!commitFile.exists()) {
-            try{
+            try {
                 commitFile.createNewFile();
             } catch (IOException e) {
                 //e.printStackTrace();
@@ -107,11 +111,22 @@ public class Commit implements Serializable {
         return sha1;
     }
 
-    /** Read Commit and return
+    /** Read commit.
      *  @author CuiYuxin */
     public static Commit read(String sha1) {
+        if (sha1.length() == 6) {
+            for (String fileName : Utils.plainFilenamesIn(COMMIT_DIR)) {
+                if (fileName.substring(0, 6).equals(sha1)) {
+                    sha1 = fileName;
+                    break;
+                }
+            }
+        }
         String sp = System.getProperty("file.separator");
-        File commitFile = new File(".gitlet"+sp+"commits"+sp+sha1);
+        File commitFile = new File(".gitlet" + sp + "commits" + sp + sha1);
+        if (!commitFile.exists()) {
+            return null;
+        }
         return Utils.readObject(commitFile, Commit.class);
     }
 
@@ -126,7 +141,8 @@ public class Commit implements Serializable {
         sb.append("commit ").append(Utils.sha1(Utils.serialize(this))).append("\n");
         // Merge
         if (!parent2.equals("")) {
-            sb.append("Merge: ").append(parent.substring(0,7)).append(" ").append(parent2.substring(0,7)).append("\n");
+            sb.append("Merge: ").append(parent.substring(0, 7)).append(" ");
+            sb.append(parent2.substring(0, 7)).append("\n");
         }
         // TimeStamp
         sb.append("Date: ");
@@ -155,7 +171,7 @@ public class Commit implements Serializable {
     /** Create new Blobs
      * @author CuiYuxin
      */
-    public static Map<String,String> mergeBlobs(Stage stage, Commit oldCmt) {
+    public static Map<String, String> mergeBlobs(Stage stage, Commit oldCmt) {
         Map<String, String> map = oldCmt.getBlobs();
         for (String rm : stage.getRemoveFile()) {
             map.remove(rm);

@@ -15,7 +15,7 @@ public class Branch implements Serializable  {
     /** The current working directory. */
     public static final File CWD = new File(System.getProperty("user.dir"));
     /** The branch directory. */
-    public static final File BRANCH_DIR = join(CWD, ".gitlet","branches");
+    public static final File BRANCH_DIR = join(CWD, ".gitlet", "branches");
 
     /**
      * Read a branch
@@ -24,6 +24,9 @@ public class Branch implements Serializable  {
     public static Branch read(String name) {
         String sp = System.getProperty("file.separator");
         File branchFile = new File(".gitlet" + sp + "branches" + sp + name);
+        if (!branchFile.exists()) {
+            return null;
+        }
         return Utils.readObject(branchFile, Branch.class);
     }
 
@@ -31,8 +34,8 @@ public class Branch implements Serializable  {
      * Update branch latest commit.
      * @author CuiYuxin
      */
-    public void update(String latestCommit) {
-        this.latestCommit = latestCommit;
+    public void update(String commitName) {
+        this.latestCommit = commitName;
     }
 
     /**

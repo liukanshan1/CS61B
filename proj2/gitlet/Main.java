@@ -15,7 +15,7 @@ public class Main {
         }
         String firstArg = args[0];
         Repository repo = new Repository();
-        switch(firstArg) {
+        switch (firstArg) {
             case "init":
                 validateNumArgs(args, 1);
                 repo.initGitlet();
@@ -50,7 +50,13 @@ public class Main {
                 break;
             case "checkout":
                 validateNumArgs(args, 2);
-
+                if (args.length == 2) {
+                    repo.checkout(args[1]);
+                } else if (args.length == 3) {
+                    repo.checkout("head", args[2]);
+                } else if (args.length == 4) {
+                    repo.checkout(args[1], args[3]);
+                }
                 break;
             case "branch":
                 validateNumArgs(args, 2);
@@ -82,13 +88,13 @@ public class Main {
      * @param n Number of expected arguments
      */
     public static void validateNumArgs(String[] args, int n) {
-        if(!args[0].equals("init")&&!Repository.isRepo()) {
+        if (!args[0].equals("init") && !Repository.isRepo()) {
             System.out.print("Not in an initialized Gitlet directory.\n");
             System.exit(0);
         }
-        if (args[0].equals("checkout")){
-            if (args.length < n) {
-                System.out.print("Incorrect operands.\n");     // TODO: fix this
+        if (args[0].equals("checkout")) {
+            if (args.length < 2 || args.length > 4) {
+                System.out.print("Incorrect operands.\n");
                 System.exit(0);
             }
             return;
