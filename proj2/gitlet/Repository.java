@@ -29,7 +29,7 @@ public class Repository implements Serializable {
      */
     public Repository() {
         if (GITLET_DIR.exists()) {
-            String sp = System.getProperty("file.separator");
+            String sp = "/";
             File repo = new File(".gitlet" + sp + "REPO");
             if (repo.exists()) {
                 Repository repoObj = Utils.readObject(repo, Repository.class);
@@ -218,7 +218,7 @@ public class Repository implements Serializable {
     /** Write repository status to disk.
      *  @author CuiYuxin */
     public void write() {
-        String sp = System.getProperty("file.separator");
+        String sp = "/";
         File repo = new File(".gitlet" + sp + "REPO");
         if (!repo.exists()) {
             try {

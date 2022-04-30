@@ -22,7 +22,7 @@ public class Branch implements Serializable  {
      * @author CuiYuxin
      */
     public static Branch read(String name) {
-        String sp = System.getProperty("file.separator");
+        String sp = "/";
         File branchFile = new File(".gitlet" + sp + "branches" + sp + name);
         if (!branchFile.exists()) {
             return null;
@@ -55,7 +55,7 @@ public class Branch implements Serializable  {
         if (!BRANCH_DIR.exists()) {
             BRANCH_DIR.mkdir();
         }
-        String sp = System.getProperty("file.separator");
+        String sp = "/";
         File branchFile = new File(".gitlet" + sp + "branches" + sp + name);
         if (!branchFile.exists()) {
             try {
