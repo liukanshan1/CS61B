@@ -14,6 +14,10 @@ public class Main {
             System.exit(0);
         }
         String firstArg = args[0];
+        if(!firstArg.equals("init")&&!Repository.isRepo()) {
+            System.out.print("Not in an initialized Gitlet directory.");
+            System.exit(0);
+        }
         Repository repo = new Repository();
         switch(firstArg) {
             case "init":
@@ -34,7 +38,7 @@ public class Main {
                 break;
             case "log":
                 validateNumArgs(args, 1);
-
+                repo.log();
                 break;
             case "global-log":
                 validateNumArgs(args, 1);
@@ -84,7 +88,7 @@ public class Main {
     public static void validateNumArgs(String[] args, int n) {
         if (args[0].equals("checkout")){
             if (args.length < n) {
-                System.out.print("Incorrect operands.");
+                System.out.print("Incorrect operands.");     // TODO: fix this
                 System.exit(0);
             }
             return;

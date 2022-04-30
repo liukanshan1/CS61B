@@ -2,11 +2,9 @@ package gitlet;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import static gitlet.Utils.join;
 
@@ -53,11 +51,11 @@ public class Commit implements Serializable {
         this.timeStamp.setTime(0);
     }
 
-    /** Return the message
-     *  @author CuiYuxin */
-    public String getMessage() {
-        return message;
-    }
+//    /** Return the message
+//     *  @author CuiYuxin */
+//    public String getMessage() {
+//        return message;
+//    }
 
     /** Return the parent1
      *  @author CuiYuxin */
@@ -65,17 +63,17 @@ public class Commit implements Serializable {
         return parent;
     }
 
-    /** Return the parent2
-     *  @author CuiYuxin */
-    public String getParent2() {
-        return parent2;
-    }
-
-    /** Return the timestamp
-     *  @author CuiYuxin */
-    public Date getTimeStamp() {
-        return timeStamp;
-    }
+//    /** Return the parent2
+//     *  @author CuiYuxin */
+//    public String getParent2() {
+//        return parent2;
+//    }
+//
+//    /** Return the timestamp
+//     *  @author CuiYuxin */
+//    public Date getTimeStamp() {
+//        return timeStamp;
+//    }
 
     /** Return the Map<String,String>
      *  @author CuiYuxin */
@@ -109,6 +107,18 @@ public class Commit implements Serializable {
         String sp = System.getProperty("file.separator");
         File commitFile = new File(".gitlet"+sp+"commits"+sp+sha1);
         return Utils.readObject(commitFile, Commit.class);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("===\n");
+        sb.append("commit ").append(Utils.sha1(Utils.serialize(this))).append("\n");
+        sb.append("Date: ");
+        SimpleDateFormat format = new SimpleDateFormat("E MMM dd HH:mm:ss yyyy Z");
+        sb.append(format.format(timeStamp)).append("\n");
+        sb.append(message).append("\n");
+        return sb.toString();
     }
 
     /** Create new Blobs

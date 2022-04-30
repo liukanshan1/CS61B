@@ -53,15 +53,14 @@ public class Stage implements Serializable {
      * @author CuiYuxin
      */
     public void add(String fileName, String blobName, String head) {
-        if (!this.blobmap.containsKey(fileName)) {
-            this.blobmap.put(fileName, blobName);
-        } else {
-            Commit headObj = Commit.read(head);
-            if (headObj.getBlobs().get(fileName).equals(blobName)) {
+        Commit headObj = Commit.read(head);
+        Map<String,String> oldBlobs = headObj.getBlobs();
+        if (oldBlobs.getOrDefault(fileName,"").equals(blobName)) {
+            if (this.blobmap.containsKey(fileName)) {
                 this.blobmap.remove(fileName);
-            } else {
-                this.blobmap.replace(fileName, blobName);
             }
+        } else {
+            this.blobmap.put(fileName, blobName);
         }
     }
 

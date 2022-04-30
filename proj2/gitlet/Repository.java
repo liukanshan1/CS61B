@@ -133,6 +133,21 @@ public class Repository implements Serializable {
         stage.write();
     }
 
+
+    /**
+     * Print the log the current branch.
+     * @author CuiYuxin
+     */
+    public void log(){
+        String cmtID = head;
+        while (!cmtID.equals("")){
+            Commit cmt = Commit.read(cmtID);
+            System.out.println(cmt.toString());
+            cmtID = cmt.getParent();
+        }
+    }
+
+
     /** Write repository status to disk.
      *  @author:CuiYuxin */
     public void write() {
@@ -146,6 +161,14 @@ public class Repository implements Serializable {
             }
         }
         Utils.writeObject(repo, this);
+    }
+
+    /**
+     * Check if current folder is a repository.
+     * @author CuiYuxin
+     */
+    public static boolean isRepo(){
+        return GITLET_DIR.exists();
     }
 
 }
