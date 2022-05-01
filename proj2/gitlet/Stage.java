@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 public class Stage implements Serializable {
+    /** The current working directory. */
+    public static final File CWD = new File(System.getProperty("user.dir"));
     /** The stage map. */
     private Map<String, String> blobmap = new java.util.HashMap<>();
     /** Remove filename. Key:filename Value:SHA1 */
@@ -135,7 +137,7 @@ public class Stage implements Serializable {
      */
     public String[] getUnstagedFiles(String head) {
         List<String> unstaged = new ArrayList<>();
-        List<String> allFiles = Utils.plainFilenamesIn("");
+        List<String> allFiles = Utils.plainFilenamesIn(CWD);
         Commit headObj = Commit.read(head);
         for (String file : allFiles) {
             File f = new File(file);
@@ -171,7 +173,7 @@ public class Stage implements Serializable {
      */
     public String[] getUntrackedFiles(String head) {
         List<String> untracked = new ArrayList<>();
-        List<String> allFiles = Utils.plainFilenamesIn("");
+        List<String> allFiles = Utils.plainFilenamesIn(CWD);
         Commit headCmt = Commit.read(head);
         for (String file : allFiles) {
             if (!this.blobmap.containsKey(file)) {
