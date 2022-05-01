@@ -315,7 +315,7 @@ public class Repository implements Serializable {
      */
     private void checkOverwritten(Commit otherCmt,  Commit curCmt) {
         // current directory files
-        List<String> curDirFiles = Utils.plainFilenamesIn(new File("./"));
+        List<String> curDirFiles = Utils.plainFilenamesIn(CWD);
         // other branch's latest files
         Set<String> cmtFiles = otherCmt.getBlobs().keySet();
         for (String fileName : curDirFiles) {
