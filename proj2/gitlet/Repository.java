@@ -418,7 +418,7 @@ public class Repository implements Serializable {
                     continue;
                 } else {
                     conflict = true;
-                    dealingConflict(stage, headBlobs, otherBlobs, file);
+                    dC(stage, headBlobs, otherBlobs, file);
                 }
             }
         }
@@ -454,14 +454,14 @@ public class Repository implements Serializable {
      * Deal with conflicts.
      * @author CuiYuxin
      */
-    private void dealingConflict(Stage stage, Map<String, String> headBlobs, Map<String, String> otherBlobs, String file) {
-        byte[] file1 = Blob.getBlob(headBlobs.get(file));
+    private void dC(Stage s, Map<String, String> hB, Map<String, String> oB, String f) {
+        byte[] file1 = Blob.getBlob(hB.get(f));
         String content1 = new String(file1, StandardCharsets.UTF_8);
         String content2;
-        if (!otherBlobs.containsKey(file)) {
+        if (!oB.containsKey(f)) {
             content2 = "";
         } else {
-            byte[] file2 = Blob.getBlob(otherBlobs.get(file));
+            byte[] file2 = Blob.getBlob(oB.get(f));
             content2 = new String(file2, StandardCharsets.UTF_8);
         }
         StringBuilder sb = new StringBuilder();
@@ -470,10 +470,10 @@ public class Repository implements Serializable {
         sb.append("=======\n");
         sb.append(content2);
         sb.append(">>>>>>>\n");
-        File conFile = new File(file);
+        File conFile = new File(f);
         Utils.writeContents(conFile, sb.toString());
         Blob conBlob = new Blob(conFile);
-        stage.add(file, conBlob.write(), head);
+        s.add(f, conBlob.write(), head);
     }
 
     /**
