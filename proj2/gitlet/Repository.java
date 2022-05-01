@@ -396,7 +396,7 @@ public class Repository implements Serializable {
         Map<String, String> headBlobs = headCmt.getBlobs();
         Map<String, String> otherBlobs = other.getBlobs();
         Map<String, String> splitBlobs = split.getBlobs();
-        List<String> curFiles = Utils.plainFilenamesIn("./");
+        List<String> curFiles = Utils.plainFilenamesIn(".");
         boolean conflict = false;
         for (String file : headBlobs.keySet()) {
             if (splitBlobs.getOrDefault(file, "").equals(headBlobs.get(file))) {

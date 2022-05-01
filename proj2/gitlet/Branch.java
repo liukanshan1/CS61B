@@ -63,7 +63,7 @@ public class Branch implements Serializable  {
      * Return the latest commit(SHA1).
      * @author CuiYuxin
      */
-    public String getLatestCommit(){
+    public String getLatestCommit() {
         return latestCommit;
     }
 

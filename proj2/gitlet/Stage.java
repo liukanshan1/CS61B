@@ -135,7 +135,7 @@ public class Stage implements Serializable {
      */
     public String[] getUnstagedFiles(String head) {
         List<String> unstaged = new ArrayList<>();
-        List<String> allFiles = Utils.plainFilenamesIn("./");
+        List<String> allFiles = Utils.plainFilenamesIn(".");
         Commit headObj = Commit.read(head);
         for (String file : allFiles) {
             File f = new File(file);
@@ -171,7 +171,7 @@ public class Stage implements Serializable {
      */
     public String[] getUntrackedFiles(String head) {
         List<String> untracked = new ArrayList<>();
-        List<String> allFiles = Utils.plainFilenamesIn("./");
+        List<String> allFiles = Utils.plainFilenamesIn(".");
         Commit headCmt = Commit.read(head);
         for (String file : allFiles) {
             if (!this.blobmap.containsKey(file)) {
