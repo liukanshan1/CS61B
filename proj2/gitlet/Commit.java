@@ -114,9 +114,9 @@ public class Commit implements Serializable {
     /** Read commit.
      *  @author CuiYuxin */
     public static Commit read(String sha1) {
-        if (sha1.length() == 6) {
+        if (sha1.length() == 8) {
             for (String fileName : Utils.plainFilenamesIn(COMMIT_DIR)) {
-                if (fileName.substring(0, 6).equals(sha1)) {
+                if (fileName.substring(0, 8).equals(sha1)) {
                     sha1 = fileName;
                     break;
                 }

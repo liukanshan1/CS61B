@@ -418,25 +418,7 @@ public class Repository implements Serializable {
                     continue;
                 } else {
                     conflict = true;
-                    byte[] file1 = Blob.getBlob(headBlobs.get(file));
-                    String content1 = new String(file1, StandardCharsets.UTF_8);
-                    String content2;
-                    if (!otherBlobs.containsKey(file)) {
-                        content2 = "";
-                    } else {
-                        byte[] file2 = Blob.getBlob(otherBlobs.get(file));
-                        content2 = new String(file2, StandardCharsets.UTF_8);
-                    }
-                    StringBuilder sb = new StringBuilder();
-                    sb.append("<<<<<<< HEAD\n");
-                    sb.append(content1);
-                    sb.append("=======\n");
-                    sb.append(content2);
-                    sb.append(">>>>>>>\n");
-                    File conFile = new File(file);
-                    Utils.writeContents(conFile, sb.toString());
-                    Blob conBlob = new Blob(conFile);
-                    stage.add(file, conBlob.write(), head);
+                    dealingConflict(stage, headBlobs, otherBlobs, file);
                 }
             }
         }
@@ -466,6 +448,32 @@ public class Repository implements Serializable {
         br.update(head);
         br.write();
         write(); //update repository status
+    }
+
+    /**
+     * Deal with conflicts.
+     * @author CuiYuxin
+     */
+    private void dealingConflict(Stage stage, Map<String, String> headBlobs, Map<String, String> otherBlobs, String file) {
+        byte[] file1 = Blob.getBlob(headBlobs.get(file));
+        String content1 = new String(file1, StandardCharsets.UTF_8);
+        String content2;
+        if (!otherBlobs.containsKey(file)) {
+            content2 = "";
+        } else {
+            byte[] file2 = Blob.getBlob(otherBlobs.get(file));
+            content2 = new String(file2, StandardCharsets.UTF_8);
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("<<<<<<< HEAD\n");
+        sb.append(content1);
+        sb.append("=======\n");
+        sb.append(content2);
+        sb.append(">>>>>>>\n");
+        File conFile = new File(file);
+        Utils.writeContents(conFile, sb.toString());
+        Blob conBlob = new Blob(conFile);
+        stage.add(file, conBlob.write(), head);
     }
 
     /**
