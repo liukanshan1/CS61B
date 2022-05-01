@@ -70,9 +70,9 @@ public class Main {
                 validateNumArgs(args, 2);
                 repo.reset(args[1]);
                 break;
-            case "merage":
+            case "merge":
                 validateNumArgs(args, 2);
-
+                repo.merge(args[1]);
                 break;
             default:
                 System.out.print("No command with that name exists.\n");
