@@ -80,12 +80,7 @@ public class Repository implements Serializable {
         String blobName = blob.write();
         //update staging area
         File stageFile = new File(".gitlet/stage");
-        Stage stage;
-        if (stageFile.exists()) {
-            stage = Utils.readObject(stageFile, Stage.class);
-        } else {
-            stage = new Stage();
-        }
+        Stage stage = new Stage();
         stage.add(fileName, blobName, head);
         stage.write();
     }

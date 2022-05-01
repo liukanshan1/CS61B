@@ -58,6 +58,9 @@ public class Stage implements Serializable {
     public void add(String fileName, String blobName, String head) {
         Commit headObj = Commit.read(head);
         Map<String, String> oldBlobs = headObj.getBlobs();
+        if (removeFile.contains(fileName)) {
+            removeFile.remove(fileName);
+        }
         if (oldBlobs.getOrDefault(fileName, "").equals(blobName)) {
             if (this.blobmap.containsKey(fileName)) {
                 this.blobmap.remove(fileName);
