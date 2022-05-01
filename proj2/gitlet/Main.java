@@ -93,7 +93,19 @@ public class Main {
             System.exit(0);
         }
         if (args[0].equals("checkout")) {
-            if (args.length < 2 || args.length > 4) {
+            if (args.length == 2) {
+                return;
+            } else if (args.length == 3) {
+                if (!args[1].equals("--")) {
+                    System.out.print("Incorrect operands.\n");
+                    System.exit(0);
+                }
+            } else if (args.length == 4) {
+                if (!args[2].equals("--")) {
+                    System.out.print("Incorrect operands.\n");
+                    System.exit(0);
+                }
+            } else {
                 System.out.print("Incorrect operands.\n");
                 System.exit(0);
             }
