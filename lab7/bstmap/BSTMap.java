@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
 
-public class BSTMap<K extends Comparable, V> implements Map61B<K, V> {
+public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     /**
      * The node of the BST.
      * @author CuiYuxin
@@ -279,7 +279,7 @@ public class BSTMap<K extends Comparable, V> implements Map61B<K, V> {
      * Iterator class of the keys in this map.
      * @author CuiYuxin
      */
-    class BSTKeyIterator implements Iterator<K> {
+    private class BSTKeyIterator implements Iterator<K> {
         private LinkedList<K> list;
         private int index = 0;
 
